@@ -4,6 +4,7 @@ using System.Collections;
 public class CursorController : MonoBehaviour {
 
 	public WandController _WandController;
+	public WandController _WandControllerOther;
 	public Transform _PointerAnchor;
 	public MeshRenderer _Cursor;
 	public LineRenderer _Line;
@@ -26,16 +27,31 @@ public class CursorController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if (_WandController.gripDown) {
+		if ((_WandController.gripDown && _WandControllerOther.gripPress) ||
+			(_WandController.gripPress && _WandControllerOther.gripDown))
+		{
+			SetCursorState (CursorState.lockRadXZ);
+			UpdateCursorTransformState ();
+		}
+
+		if ((_WandController.gripDown & !_WandControllerOther.gripPress) ||
+			(_WandController.gripPress & _WandControllerOther.gripUp))
+		{
 			SetCursorState (CursorState.lockRad);
 			UpdateCursorTransformState ();
-		} 
-		if (_WandController.gripPress && _WandController.triggerDown) {
-			SetCursorState (CursorState.lockRadXZ);
 		}
-		if (_WandController.gripUp) {
+			
+		if ((_WandController.triggerDown && _WandController.gripPress && !_WandControllerOther.gripPress) ||
+			(_WandController.gripDown && _WandController.triggerPress && !_WandControllerOther.gripPress))
+		{
+			SetCursorState (CursorState.lockRadXZ);
+			UpdateCursorTransformState ();
+		}
+
+		if (_WandController.gripUp)
+		{
 			SetCursorState (CursorState.unlocked);
-		} 
+		}
 
 
 		if (_WandController.rayHit || locked) {
@@ -100,7 +116,7 @@ public class CursorController : MonoBehaviour {
 		}
 	}
 
-	private void SetCursorState(CursorState state){
+	public void SetCursorState(CursorState state){
 		_CursorState = state;
 		if (state == CursorState.unlocked) {
 			locked = false;

@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GlobalMovement : MonoBehaviour {
 
-	public Transform _ScaleWrapper;
-	public Transform _MoveWrapper;
-	public Transform _RotateWrapper;
+	public Transform _GlobalWrapper;
 
 	public WandController _WCL; //wandcontroller right
 	public WandController _WCR; //wandcontroller left
-	public WandController _ActiveController;
 
 	private bool _SceneInFocus = true;
 	private bool _SceneMovementEnabled = true;
@@ -21,176 +19,186 @@ public class GlobalMovement : MonoBehaviour {
 	};
 	public MovementReference _MovementReference = MovementReference.cursor;
 
-	private bool _SingleClickActive = false;
-	private Vector3[] _ClickStartPos; //the scene and controller pos at start of first button down
-	private Quaternion[] _ClickStartRot; //the scene and controller rot at start of first button down
-	private Vector3 _ClickStartScale;//the scene startScale 
+	private List<Vector3> _Focuspoints = new List<Vector3> ();
+	private List<Vector3> _FocuspointsPrev = new List<Vector3> (); //previous frame
+	private List<GameObject> _ActiveCursor = new List<GameObject> ();
+	private List<WandController> _ActiveWand = new List<WandController> ();
+	private bool _ChangeInFocusPointSize = false;
 
 	private bool _DoubleClickActive = false;
-	private Vector3[] _DoubleClickStartPos; //the scene and controller pos at start of first button down
-	private Quaternion[] _DoubleClickStartRot; //the scene and controller rot at start of first button down
-	private Vector3 _DoubleClickStartScale;//the scene startScale 
 
-
-	// Use this for initialization
-	void Start () {
-		_ClickStartPos = new Vector3[5];
-		_ClickStartRot = new Quaternion[3];
-
-		_DoubleClickStartPos = new Vector3[5];
-		_DoubleClickStartRot = new Quaternion[3];
-	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 		if (_SceneInFocus && _SceneMovementEnabled) {
 
-			UpdateStartState ();
-
-			//Translate - Only one grip button pressed
-			if (_WCR.gripPress ^ _WCL.gripPress && _SingleClickActive) {
-				DoTranslate ();
-			}
+			UpdateFocusPoints ();
 
 			//Rotate && Scale - Two buttons pressed
-			if (_WCR.gripPress && _WCL.gripPress && _DoubleClickActive) {
-				DoRotate ();
-				DoScale ();
+			if (_WCR.gripPress && _WCL.gripPress) {
+				if (!(_WCL.triggerPress ^ _WCR.triggerPress))
+				{
+					DoTranslate ();
+				}
+				if (!_WCL.triggerPress)
+				{
+					DoRotate (true);
+				}
+				if (!_WCR.triggerPress)
+				{
+					DoScale ();
+				}
+				return;
 			}
+
+			//Translate - Only one grip button pressed
+			if (_WCR.gripPress ^ _WCL.gripPress) {
+				
+				if (_ActiveWand [0].triggerPress)
+				{
+					DoTranslate ();
+					return;
+				}
+
+				DoTranslate ();
+				return;
+			}
+				
 		}
 
 	}
 
-	private void UpdateStartState(){
-		//first button down start state
-		if (_WCR.gripPress ^ _WCL.gripPress && !_SingleClickActive) 
+	private void DoTranslate(bool invert = false, bool limitXZ = false){
+		if (_Focuspoints.Count > 0)
 		{
-			_SingleClickActive = true;
+			if (_ChangeInFocusPointSize)
+			{
+				Debug.Log ("skipped frame");
+				return;
+			}
 
-			UpdateTransformState ();
-		} 
-		else if(!_WCR.gripPress && !_WCL.gripPress)
-		{
-			_SingleClickActive = false;
-		}
+			Vector3 averagePoint = GetAverage (_Focuspoints);
+			Vector3 averagePointPrev = GetAverage (_FocuspointsPrev);
 
-		//double button down start state
-		if (_WCR.gripPress && _WCL.gripPress && !_DoubleClickActive) 
-		{
-			_SingleClickActive = false;
-			_DoubleClickActive = true;
+			Vector3 diff = averagePoint - averagePointPrev;
+			if (limitXZ)
+				diff = new Vector3 (diff.x, 0, diff.y);
 
-			UpdateTransformState ();
-		} 
-		else if(!_WCR.gripPress || !_WCL.gripPress)
-		{
-			_DoubleClickActive = false;
+			Debug.Log (diff);
+			float sign = invert ? -1f : 1f;
+
+			_GlobalWrapper.Translate(diff*sign, Space.World);
 		}
 	}
 
-	private void DoTranslate(){
-
-		Vector3 movDelta; //distance diff the referencepoint has moved since press started
-		switch (_MovementReference) {
-
-		case MovementReference.controller:
-			//movement paired directly to controller (=hand position)
-			movDelta = _WCL.gripPress ?
-				_ClickStartPos [1] - _WCL.transform.position:
-				_ClickStartPos [2] - _WCR.transform.position;
-
-			if(_WCR.triggerPress && _WCL.triggerPress){
-				_MoveWrapper.localPosition = new Vector3 (
-					_ClickStartPos [0].x,
-					(_ClickStartPos [0] - movDelta).y,
-					_ClickStartPos [0].z);
-				
-			} else if (_WCR.triggerPress ^ _WCL.triggerPress) {
-				
-				_MoveWrapper.localPosition = new Vector3 (
-					(_ClickStartPos [0] - movDelta).x,
-					_ClickStartPos [0].y,
-					(_ClickStartPos [0] - movDelta).z);
-				
-			} else{
-				_MoveWrapper.localPosition = _ClickStartPos [0] - movDelta;
+	private void DoRotate(bool limitXZ = false){
+		if (_Focuspoints.Count > 1)
+		{
+			//get rot angle and axis
+			Vector3 oldDir = _FocuspointsPrev [0] - _FocuspointsPrev [1];
+			Vector3 newDir = _Focuspoints [0] - _Focuspoints [1];
+			if (limitXZ)
+			{
+				oldDir = new Vector3 (oldDir.x, 0, oldDir.z);
+				newDir = new Vector3 (newDir.x, 0, newDir.z);
 			}
 
-			break;
+			Vector3 cross = Vector3.Cross (oldDir, newDir);
+			float rotAngle = Vector3.Angle (oldDir, newDir);
 
-		case MovementReference.cursor:
-			//movement paired to cursor movement; can cover bigger distances if cursor is further removed from hand
-			movDelta = _WCL.gripPress ?
-				_ClickStartPos [3] - _WCL._Cursor.position :
-				_ClickStartPos [4] - _WCR._Cursor.position;
-
-			if(_WCR.triggerPress && _WCL.triggerPress){
-				
-				_MoveWrapper.localPosition = new Vector3 (
-					_ClickStartPos [0].x,
-					(_ClickStartPos [0] - movDelta).y,
-					_ClickStartPos [0].z);
-
-			} else if (_WCR.triggerPress ^ _WCL.triggerPress) {
-				
-				_MoveWrapper.localPosition = new Vector3 (
-					(_ClickStartPos [0] - movDelta).x,
-					_ClickStartPos [0].y,
-					(_ClickStartPos [0] - movDelta).z);
-				
-			} else {
-				_MoveWrapper.localPosition = _ClickStartPos [0] - movDelta;
+			//correction part 1 - get current localpos for focuspoints
+			List<Vector3> localPointsPreTransform = new List<Vector3> ();
+			foreach (Vector3 pos in _Focuspoints)
+			{
+				localPointsPreTransform.Add(_GlobalWrapper.InverseTransformPoint (pos));
 			}
-				
-			break;
+			Vector3 averagePreTransform = GetAverage (_Focuspoints);
+
+			//rotate
+			_GlobalWrapper.Rotate (cross.normalized, rotAngle, Space.World);
+
+			//correction part 2 - get worldpoints for converted focuspoints and check diff 
+			List<Vector3> localPointsPostTransform = new List<Vector3> ();
+			for(int i = 0; i < localPointsPreTransform.Count; i++)
+			{
+				localPointsPostTransform.Add(_GlobalWrapper.TransformPoint(localPointsPreTransform[i]));
+			}
+			Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
+		
+			Vector3 correction = averagePostTransform -averagePreTransform;
+			_GlobalWrapper.Translate (-correction, Space.World);
 		}
-
-	}
-
-	private void DoRotate(){
-		//XZ translate model along Left Delta
-		Vector3 movDeltaL = _ClickStartPos[3] - _WCL._Cursor.position;
-		_MoveWrapper.localPosition = new Vector3 (
-			(_ClickStartPos [0] - movDeltaL).x,
-			_ClickStartPos [0].y,
-			(_ClickStartPos [0] - movDeltaL).z);
-
-		//Rotate model around left cursorpoint
-		/*Vector3 vectorBetweenControllersStart = Vector3.ProjectOnPlane (_WCR._Cursor.position - _WCL._Cursor.position, new Vector3(0,1,0));
-		Vector3 vectorBetweenControllersEnd = Vector3.ProjectOnPlane (_ClickStartPos[4] - _ClickStartPos[3], new Vector3(0,1,0)); //Vector3.Project
-		Debug.DrawRay (_WCL._Cursor.position, vectorBetweenControllersStart);
-		Debug.DrawRay (_WCL._Cursor.position, vectorBetweenControllersEnd);
-
-		float angle = Vector3.Angle(vectorBetweenControllersStart, vectorBetweenControllersEnd);
-
-		Debug.Log (Mathf.Deg2Rad*angle);
-		_RotateWrapper.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
-*/
-
-		Vector3 relativePos = _ClickStartPos [3] - _WCR._Cursor.position;
-		_MoveWrapper.rotation = Quaternion.LookRotation (relativePos, Vector3.up);
-
-		//_RotateWrapper.RotateAround( _WCL._Cursor.position, new Vector3(0,1,0), Mathf.Deg2Rad*angle);
-		//_RotateWrapper.rotation = Quaternion.FromToRotation(Vector3.ProjectOnPlane (_ClickStartPos[4] - _ClickStartPos[3], new Vector3(0,1,0)), Vector3.ProjectOnPlane (_WCR._Cursor.position - _WCL._Cursor.position, new Vector3(0,1,0)));
-
 	}
 
 	private void DoScale(){
+		if (_Focuspoints.Count > 1)
+		{
+			//get magintude diff
+			float oldMag = Vector3.Magnitude(_FocuspointsPrev [0] - _FocuspointsPrev [1]);
+			float newMag = Vector3.Magnitude(_Focuspoints [0] - _Focuspoints [1]);
+			float factor = newMag / oldMag;
 
+			//correction part 1 - get current localpos for focuspoints
+			List<Vector3> localPointsPreTransform = new List<Vector3> ();
+			foreach (Vector3 pos in _Focuspoints)
+			{
+				localPointsPreTransform.Add(_GlobalWrapper.InverseTransformPoint (pos));
+			}
+			Vector3 averagePreTransform = GetAverage(_Focuspoints);
+
+			//scale
+			_GlobalWrapper.localScale = new Vector3 (factor*_GlobalWrapper.localScale.x, factor * _GlobalWrapper.localScale.y, factor * _GlobalWrapper.localScale.z);
+
+			//correction part 2 - get worldpoints for converted focuspoints and check diff 
+			List<Vector3> localPointsPostTransform = new List<Vector3> ();
+			for(int i = 0; i < localPointsPreTransform.Count; i++)
+			{
+				localPointsPostTransform.Add(_GlobalWrapper.TransformPoint(localPointsPreTransform[i]));
+			}
+			Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
+
+			Vector3 correction = averagePostTransform -averagePreTransform;
+			_GlobalWrapper.Translate (-correction, Space.World);
+		}
 	}
 
-	public void UpdateTransformState(){
-		_ClickStartPos[0] = _MoveWrapper.localPosition;
-		_ClickStartPos[1] = _WCL.transform.position;
-		_ClickStartPos[2] = _WCR.transform.position;
-		_ClickStartPos[3] = _WCL._Cursor.position;
-		_ClickStartPos[4] = _WCR._Cursor.position;
+	public void UpdateFocusPoints(){
+		//_FocuspointsPrev = _Focuspoints;
 
-		_ClickStartRot[0] = _RotateWrapper.localRotation;
-		_ClickStartRot[1] = _WCL.transform.rotation;
-		_ClickStartRot[2] = _WCR.transform.rotation;
+		_FocuspointsPrev.Clear();
+		foreach (Vector3 pos in _Focuspoints)
+		{
+			_FocuspointsPrev.Add (pos);
+		}
 
-		_ClickStartScale = _ScaleWrapper.localScale;
+		_Focuspoints.Clear();
+		_ActiveCursor.Clear ();
+		_ActiveWand.Clear ();
+
+		if (_WCL.gripPress)
+		{
+			_Focuspoints.Add (_WCL._Cursor.position);
+			_ActiveCursor.Add (_WCL._Cursor.gameObject);
+			_ActiveWand.Add (_WCL);
+		}
+		if (_WCR.gripPress)
+		{
+			_Focuspoints.Add (_WCR._Cursor.position);
+			_ActiveCursor.Add (_WCR._Cursor.gameObject);
+			_ActiveWand.Add (_WCR);
+		}
+
+		_ChangeInFocusPointSize = _Focuspoints.Count == _FocuspointsPrev.Count ? false : true;
+	}
+
+	private Vector3 GetAverage(List<Vector3> list){
+		Vector3 averagePoint = new Vector3();
+		foreach (Vector3 pos in list)
+		{
+			averagePoint += pos;
+		}
+		averagePoint /= list.Count;
+		return averagePoint;
 	}
 }
