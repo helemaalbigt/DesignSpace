@@ -19,16 +19,22 @@ public class WandController : MonoBehaviour {
 	[Header("POINTER PARAMS")]
 	public float _RayRange;
 	public Transform _PointerAnchor;
-	public Transform _Cursor;
+	public CursorController cursor;
+
+	public float _MaxDoubleClickTime = 500f;
+	public bool doubleClick = false;
+	private float _LastClickTimeStamp = -99999f;
 
 	private Ray _Ray;
 	private RaycastHit _Hit;
 
 	[Header("POINTER READOUT")]
 	public bool rayHit;
+	public bool rayHitModel;
 	public string hitTag;
 	public int hitLayer;
 	public float hitDistance;
+	public GameObject hitObj;
 	public Vector3 hitPos;
 	public Vector3 hitPosPrev;
 	public Vector3 hitNorm;
@@ -89,6 +95,12 @@ public class WandController : MonoBehaviour {
 		triggerPress = _Controller.GetPress (_TriggerButton) ? true : false;
 		triggerAxis = _Controller.GetAxis(_TriggerButton).x;
 
+		doubleClick = _Controller.GetPressDown (_TriggerButton) && Time.time - _LastClickTimeStamp <= _MaxDoubleClickTime ? true : false;
+		if (_Controller.GetPressDown (_TriggerButton))
+		{
+			_LastClickTimeStamp = Time.time;
+		}
+
 		touchHoverDown = _Controller.GetTouchDown (_TouchButton) ? true : false;
 		touchHoverUp = _Controller.GetTouchUp (_TouchButton) ? true : false;
 		touchHover = _Controller.GetTouch (_TouchButton) ? true : false;
@@ -118,13 +130,17 @@ public class WandController : MonoBehaviour {
 			rayHit = true;
 			hitTag = _Hit.transform.tag;
 			hitLayer = _Hit.transform.gameObject.layer;
+			hitObj = _Hit.transform.gameObject;
 			hitPos = _Hit.point;
 			hitNorm = _Hit.normal;
 			hitDistance = _Hit.distance;
+			rayHitModel = hitLayer == LayerMask.NameToLayer ("Model") ? true : false;
+
+			//_Hit.transform.gameObject.SendMessage ("HoverOn", this);
 		} else {
 			rayHit = false;
 		}
-
+			
 	}
 
 	private void OnTriggerEnter(Collider collider){
@@ -133,5 +149,9 @@ public class WandController : MonoBehaviour {
 
 	private void OnTriggerExit(Collider collider){
 
+	}
+
+	public void Vibrate(ushort dur){
+		_Controller.TriggerHapticPulse (dur);
 	}
 }

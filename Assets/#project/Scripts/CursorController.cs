@@ -23,10 +23,15 @@ public class CursorController : MonoBehaviour {
 	};
 	public CursorState _CursorState = CursorState.unlocked;
 
-	
+	public Vector3 curPos;
+	public Vector3 prevPos;
+
 	// Update is called once per frame
 	void Update () {
-		
+
+		prevPos = curPos;
+		curPos = transform.position;
+
 		if ((_WandController.gripDown && _WandControllerOther.gripPress) ||
 			(_WandController.gripPress && _WandControllerOther.gripDown))
 		{
@@ -111,8 +116,12 @@ public class CursorController : MonoBehaviour {
 		} else {
 			//hide the cursor and the line
 			_Cursor.enabled = false;
-			_Line.SetPosition (0, Vector3.zero);
-			_Line.SetPosition (1, Vector3.zero);
+			//_Line.SetPosition (0, Vector3.zero);
+			//_Line.SetPosition (1, Vector3.zero);
+			_Line.SetPosition (0, _PointerAnchor.position);
+			_Line.SetPosition (1, _PointerAnchor.position + _PointerAnchor.forward*10f);
+			_Line.material.color = Color.black;
+			_Line.material.SetColor("_EmissionColor", Color.black);
 		}
 	}
 
