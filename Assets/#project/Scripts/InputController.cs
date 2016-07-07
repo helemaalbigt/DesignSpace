@@ -13,12 +13,14 @@ public class InputController : MonoBehaviour {
 	private int FirstTriggerIndex = 0; 								//index (L=0, R=1) of first trigger pressed (in case both pressed, indicates the one that was already pressed)
 	public static event Action<WandController[]> OnOneTrigger;		//Fires when only one trigger active - passes WandController of active trigger at index 0, and other at index 1
 	public static event Action<WandController[]> OnBothTriggers;	//Fires when both triggers active - passes WandController of first active trigger at index 0, and other at index 1
+	public static event Action<WandController[]> OnNoTriggers;		//firees when both triggers are first released
 	public static int activeTriggers = 0; 							//how many triggers are active
 
 	//Grip
 	private int FirstGripIndex = 0;
 	public static event Action<WandController[]> OnOneGrip;
 	public static event Action<WandController[]> OnBothGrips;
+	public static event Action<WandController[]> OnNoGrips;
 	public static int activeGrips = 0; //how many triggers are active
 
 	//Menu
@@ -80,6 +82,12 @@ public class InputController : MonoBehaviour {
 				OnOneTrigger (controllers);
 		} else
 		{
+			if (activeTriggers != 0)
+			{
+				controllers = new WandController[] { left, right };
+				if (OnNoTriggers != null)
+					OnNoTriggers (controllers);
+			}
 			activeTriggers = 0;
 		}
 	}
@@ -107,6 +115,12 @@ public class InputController : MonoBehaviour {
 				OnOneGrip (controllers);
 		} else
 		{
+			if (activeGrips != 0)
+			{
+				controllers = new WandController[] { left, right };
+				if (OnNoGrips != null)
+					OnNoGrips (controllers);
+			}
 			activeGrips = 0;
 		}
 	}

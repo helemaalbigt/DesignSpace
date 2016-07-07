@@ -24,10 +24,10 @@ public class SelectionController : MonoBehaviour {
 
 		foreach (WandController C in cont)
 		{
-			if (!C.triggerPress || C.hitObj == null)
+			if (!C.triggerPress || !C.triggerDown || C.hitObj == null)
 				return;
 
-			if (!C.rayHit && InputController.activeTouchPress == 0)
+			if (!C.rayHit && InputController.activeTouchPress == 0 && C.triggerDown)
 			{
 				ClearSelection ();
 				return;

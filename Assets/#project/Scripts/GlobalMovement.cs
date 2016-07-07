@@ -5,10 +5,7 @@ using System.Collections.Generic;
 public class GlobalMovement : MonoBehaviour {
 
 	public Transform _GlobalWrapper;
-	public List<Transform> _TargetTransforms = new List<Transform> ();
-
-	public WandController _WCL; //wandcontroller right
-	public WandController _WCR; //wandcontroller left
+	private List<Transform> _TargetTransforms = new List<Transform> ();
 
 	private List<Vector3> _Focuspoints = new List<Vector3> ();
 	private List<Vector3> _FocuspointsPrev = new List<Vector3> (); //previous frame
@@ -17,32 +14,32 @@ public class GlobalMovement : MonoBehaviour {
 
 
 	void Start(){
-		SetGlobalTarget ();
+		_TargetTransforms.Add (_GlobalWrapper);
 	}
 
 	private void OnEnable(){
-		/*InputController.OnOneGrip += DoTranslate;
+		InputController.OnNoGrips += SetCursorState;
+		InputController.OnOneGrip += SetCursorState;
+		InputController.OnBothGrips += SetCursorState;
 
+		InputController.OnOneGrip += DoTranslate;
 		InputController.OnBothGrips += DoTranslate;
 		InputController.OnBothGrips += DoRotate;
-		InputController.OnBothGrips += DoScale;*/
-
-		SelectionController.OnSelectionChange += SetModelTarget;
-		SelectionController.OnSelectionCancel += SetGlobalTarget;
+		InputController.OnBothGrips += DoScale;
 
 		//bug after scaling/rotating and holding one grip down, the model jumps to cursors new hitpoint of cursor
 		//Todo - save position of cursor in TargetTransforms local space at start of transformation, and use this for transformation
 	}
 
 	private void OnDisable(){
-		/*InputController.OnOneGrip -= DoTranslate;
+		InputController.OnNoGrips -= SetCursorState;
+		InputController.OnOneGrip -= SetCursorState;
+		InputController.OnBothGrips -= SetCursorState;
 
+		InputController.OnOneGrip -= DoTranslate;
 		InputController.OnBothGrips -= DoTranslate;
 		InputController.OnBothGrips -= DoRotate;
-		InputController.OnBothGrips -= DoScale;*/
-
-		SelectionController.OnSelectionChange -= SetModelTarget;
-		SelectionController.OnSelectionCancel -= SetGlobalTarget;
+		InputController.OnBothGrips -= DoScale;
 	}
 
 	private void DoTranslate(WandController[] C){
@@ -147,7 +144,7 @@ public class GlobalMovement : MonoBehaviour {
 			Vector3 averagePreTransform = GetAverage( new Vector3[] {C[0].cursor.curPos,C[1].cursor.curPos} );
 
 			//scale
-			trans.localScale = new Vector3 (factor * _GlobalWrapper.localScale.x, factor * _GlobalWrapper.localScale.y, factor * _GlobalWrapper.localScale.z);
+			trans.localScale = new Vector3 (factor * trans.localScale.x, factor * trans.localScale.y, factor * trans.localScale.z);
 
 			//correction part 2 - get worldpoints for converted focuspoints and check diff 
 			Vector3[] localPointsPostTransform = new Vector3[] {
@@ -162,42 +159,23 @@ public class GlobalMovement : MonoBehaviour {
 	
 	}
 
-	private void SetModelTarget(){
-		if (SelectionController._Selection.Count > 0)
+	private void SetCursorState(WandController[] C){
+		foreach (WandController cont in C)
 		{
-			_TargetTransforms.Clear ();
-
-			//assign target transforms
-			foreach (Transform trans in SelectionController._Selection)
+			if (cont.gripPress)
 			{
-				_TargetTransforms.Add (trans);
+				if (InputController.activeGrips > 1)
+				{
+					cont.cursor.SetCursorState (CursorController.CursorState.lockRad);
+				} else
+				{
+					cont.cursor.SetCursorState (CursorController.CursorState.lockRad);
+				}
+			} else
+			{
+				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
 			}
-
-			InputController.OnOneTrigger += DoTranslate;
-			InputController.OnBothTriggers += DoTranslate;
-			InputController.OnBothTriggers += DoRotate;
-			InputController.OnBothTriggers += DoScale;
-
-			InputController.OnOneGrip -= DoTranslate;
-			InputController.OnBothGrips -= DoTranslate;
-			InputController.OnBothGrips -= DoRotate;
-			InputController.OnBothGrips -= DoScale;
 		}
-	}
-
-	private void SetGlobalTarget(){
-		_TargetTransforms.Clear ();
-		_TargetTransforms.Add(_GlobalWrapper);
-
-		InputController.OnOneGrip += DoTranslate;
-		InputController.OnBothGrips += DoTranslate;
-		InputController.OnBothGrips += DoRotate;
-		InputController.OnBothGrips += DoScale;
-
-		InputController.OnOneTrigger -= DoTranslate;
-		InputController.OnBothTriggers -= DoTranslate;
-		InputController.OnBothTriggers -= DoRotate;
-		InputController.OnBothTriggers -= DoScale;
 	}
 
 	private Vector3 GetAverage(List<Vector3> list){

@@ -72,6 +72,5 @@ public class Geometry : MonoBehaviour{
 
 	public void HoverOff(){
 		IsHoveredOn = false;
-
 	}
 }

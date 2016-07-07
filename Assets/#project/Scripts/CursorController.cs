@@ -22,42 +22,20 @@ public class CursorController : MonoBehaviour {
 		lockRadXZ 	//fixed distance from controller but same Z distance
 	};
 	public CursorState _CursorState = CursorState.unlocked;
+	private CursorState _PrevCursorState;
 
 	public Vector3 curPos;
 	public Vector3 prevPos;
+
+	void Staert(){
+		SetCursorState (CursorState.unlocked);
+	}
 
 	// Update is called once per frame
 	void Update () {
 
 		prevPos = curPos;
 		curPos = transform.position;
-
-		if ((_WandController.gripDown && _WandControllerOther.gripPress) ||
-			(_WandController.gripPress && _WandControllerOther.gripDown))
-		{
-			SetCursorState (CursorState.lockRadXZ);
-			UpdateCursorTransformState ();
-		}
-
-		if ((_WandController.gripDown & !_WandControllerOther.gripPress) ||
-			(_WandController.gripPress & _WandControllerOther.gripUp))
-		{
-			SetCursorState (CursorState.lockRad);
-			UpdateCursorTransformState ();
-		}
-			
-		if ((_WandController.triggerDown && _WandController.gripPress && !_WandControllerOther.gripPress) ||
-			(_WandController.gripDown && _WandController.triggerPress && !_WandControllerOther.gripPress))
-		{
-			SetCursorState (CursorState.lockRadXZ);
-			UpdateCursorTransformState ();
-		}
-
-		if (_WandController.gripUp)
-		{
-			SetCursorState (CursorState.unlocked);
-		}
-
 
 		if (_WandController.rayHit || locked) {
 
@@ -127,11 +105,19 @@ public class CursorController : MonoBehaviour {
 
 	public void SetCursorState(CursorState state){
 		_CursorState = state;
+
 		if (state == CursorState.unlocked) {
 			locked = false;
 		} else {
 			locked = true;
 		}
+
+		if (_PrevCursorState != _CursorState)
+		{
+			UpdateCursorTransformState ();
+		}
+
+		_PrevCursorState = _CursorState;
 	}
 
 	private void UpdateCursorTransformState(){

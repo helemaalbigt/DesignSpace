@@ -3,189 +3,229 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectMovement : MonoBehaviour {
-	/*
-	public List<Transform> _TargetTransforms = new List<Transform> ();
 
-	public WandController _WCL; //wandcontroller right
-	public WandController _WCR; //wandcontroller left
-
-	public bool _MovementEnabled = false;
+	private List<Transform> _TargetTransforms = new List<Transform> ();
+	private bool _GlobalMovement = true;
 
 	private List<Vector3> _Focuspoints = new List<Vector3> ();
 	private List<Vector3> _FocuspointsPrev = new List<Vector3> (); //previous frame
 	private List<GameObject> _ActiveCursor = new List<GameObject> ();
 	private List<WandController> _ActiveWand = new List<WandController> ();
-	private bool _ChangeInFocusPointSize = false;
 
-	private bool _DoubleClickActive = false;
+	private bool movementEnabled = false;
 
-	
-	// Update is called once per frame
-	void Update () {
 
-		if (_MovementEnabled) {
-
-			UpdateFocusPoints ();
-
-			//Rotate && Scale - Two buttons pressed
-			if (_WCR.triggerPress && _WCL.triggerPress) {
-
-				if (!(_WCL.touchPress ^ _WCR.touchPress))
-				{
-					DoTranslate ();
-				}
-				if (!_WCL.touchPress)
-				{
-					DoRotate (true);
-				}
-				if (!_WCR.touchPress)
-				{
-					DoScale ();
-				}
-				return;
-			}
-	
-			//Translate - Only one grip button pressed
-			if (_WCR.triggerPress ^ _WCL.triggerPress) {
-				DoTranslate ();
-				return;
-			}
-				
-		}
-
+	void Start(){
+		_TargetTransforms.Clear ();
 	}
 
-	private void DoTranslate(bool invert = false, bool limitXZ = false){
-		if (_Focuspoints.Count > 0)
+	private void OnEnable(){
+		InputController.OnNoTriggers += SetCursorState;
+		InputController.OnOneTrigger += SetCursorState;
+		InputController.OnBothTriggers += SetCursorState;
+
+		InputController.OnOneTrigger += DoTranslate;
+		InputController.OnBothTriggers += DoTranslate;
+		InputController.OnBothTriggers += DoRotate;
+		InputController.OnBothTriggers += DoScale;
+
+		SelectionController.OnSelectionChange += SetTarget;
+		SelectionController.OnSelectionCancel += SetTarget;
+
+		SelectionController.OnSelectionChange += Enable;
+		SelectionController.OnSelectionCancel += Disable;
+		//bug after scaling/rotating and holding one grip down, the model jumps to cursors new hitpoint of cursor
+		//Todo - save position of cursor in TargetTransforms local space at start of transformation, and use this for transformation
+	}
+
+	private void OnDisable(){
+		InputController.OnNoTriggers -= SetCursorState;
+		InputController.OnOneTrigger -= SetCursorState;
+		InputController.OnBothTriggers -= SetCursorState;
+
+		InputController.OnOneTrigger -= DoTranslate;
+		InputController.OnBothTriggers -= DoTranslate;
+		InputController.OnBothTriggers -= DoRotate;
+		InputController.OnBothTriggers -= DoScale;
+
+		SelectionController.OnSelectionChange -= SetTarget;
+		SelectionController.OnSelectionCancel -= SetTarget;
+
+		SelectionController.OnSelectionChange -= Enable;
+		SelectionController.OnSelectionCancel -= Disable;
+	}
+
+	private void DoTranslate(WandController[] C){
+		if (!movementEnabled)
+			return;
+		
+		//skip a frame when changing states to avoid jumpy translations
+		if (C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)
 		{
-			if (_ChangeInFocusPointSize)
-			{
-				Debug.Log ("skipped frame");
-				return;
-			}
+			return;
+		}
 
-			Vector3 averagePoint = GetAverage (_Focuspoints);
-			Vector3 averagePointPrev = GetAverage (_FocuspointsPrev);
+		Vector3 averagePoint; 
+		Vector3 averagePointPrev;
 
-			Vector3 diff = averagePoint - averagePointPrev;
-			if (limitXZ)
-				diff = new Vector3 (diff.x, 0, diff.y);
+		if (InputController.activeTriggers > 1)
+		{
+			averagePoint = GetAverage (new Vector3[] {C[0].cursor.curPos, C[1].cursor.curPos});
+			averagePointPrev = GetAverage (new Vector3[] {C[0].cursor.prevPos, C[1].cursor.prevPos});
+		} else
+		{
+			averagePoint = C[0].cursor.curPos;
+			averagePointPrev = C[0].cursor.prevPos;
+		}
 
-			Debug.Log (diff);
-			float sign = invert ? -1f : 1f;
+		//Debug.Log (C [0].cursor.curPos + " - " + C [1].cursor.curPos);
 
-			foreach (Transform trans in _TargetTransforms)
-			{
-				trans.Translate (diff * sign, Space.World);
-			}
+		Vector3 diff = averagePoint - averagePointPrev;
+		//if (limitXZ)
+			//diff = new Vector3 (diff.x, 0, diff.y);
+
+		foreach (Transform trans in _TargetTransforms)
+		{
+			trans.Translate (diff, Space.World);
 		}
 	}
 
-	private void DoRotate(bool limitXZ = false){
-		if (_Focuspoints.Count > 1)
+	private void DoRotate(WandController[] C){
+		if (!movementEnabled)
+			return;
+		
+		foreach (Transform trans in _TargetTransforms)
 		{
-			foreach (Transform trans in _TargetTransforms)
+			//skip a frame when changing states to avoid jumpy translations
+			if (C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)
 			{
-				//get rot angle and axis
-				Vector3 oldDir = _FocuspointsPrev [0] - _FocuspointsPrev [1];
-				Vector3 newDir = _Focuspoints [0] - _Focuspoints [1];
-				if (limitXZ)
-				{
-					oldDir = new Vector3 (oldDir.x, 0, oldDir.z);
-					newDir = new Vector3 (newDir.x, 0, newDir.z);
-				}
+				return;
+			}
 
-				Vector3 cross = Vector3.Cross (oldDir, newDir);
-				float rotAngle = Vector3.Angle (oldDir, newDir);
+			//get rot angle and axis
+			Vector3 oldDir = C[0].cursor.prevPos - C[1].cursor.prevPos;
+			Vector3 newDir = C[0].cursor.curPos - C[1].cursor.curPos;
+			if (true)
+			{
+				oldDir = new Vector3 (oldDir.x, 0, oldDir.z);
+				newDir = new Vector3 (newDir.x, 0, newDir.z);
+			}
 
-				//correction part 1 - get current localpos for focuspoints
-				List<Vector3> localPointsPreTransform = new List<Vector3> ();
-				foreach (Vector3 pos in _Focuspoints)
-				{
-					localPointsPreTransform.Add(trans.InverseTransformPoint (pos));
-				}
-				Vector3 averagePreTransform = GetAverage (_Focuspoints);
+			Vector3 cross = Vector3.Cross (oldDir, newDir);
+			float rotAngle = Vector3.Angle (oldDir, newDir);
 
-				//rotate
-				trans.Rotate (cross.normalized, rotAngle, Space.World);
+			//correction part 1 - get current global pos and localpos for focuspoints
+			Vector3[] localPointsPreTransform = new Vector3[] {
+				trans.InverseTransformPoint (C[0].cursor.curPos),
+				trans.InverseTransformPoint (C[1].cursor.curPos)
+			};
+			Vector3 averagePreTransform = GetAverage( new Vector3[] {C[0].cursor.curPos,C[1].cursor.curPos} );
 
-				//correction part 2 - get worldpoints for converted focuspoints and check diff 
-				List<Vector3> localPointsPostTransform = new List<Vector3> ();
-				for(int i = 0; i < localPointsPreTransform.Count; i++)
-				{
-					localPointsPostTransform.Add(trans.TransformPoint(localPointsPreTransform[i]));
-				}
-				Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
+			//rotate
+			trans.Rotate (cross.normalized, rotAngle, Space.World);
+
+			//correction part 2 - convert localpos back to globalpos to see diff with original, then correct diff
+			Vector3[] localPointsPostTransform = new Vector3[] {
+				trans.TransformPoint(localPointsPreTransform[0]),
+				trans.TransformPoint(localPointsPreTransform[1])
+			};
+			Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
 			
-				Vector3 correction = averagePostTransform -averagePreTransform;
-					trans.Translate (-correction, Space.World);
-			}
+			Vector3 correction = averagePostTransform -averagePreTransform;
+			trans.Translate (-correction, Space.World);
 		}
+
 	}
 
-	private void DoScale(){
-		if (_Focuspoints.Count > 1)
+	private void DoScale(WandController[] C){
+		if (!movementEnabled)
+			return;
+
+		foreach (Transform trans in _TargetTransforms)
 		{
-			foreach (Transform trans in _TargetTransforms)
+			//skip a frame when changing states to avoid jumpy translations
+			if (C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)
 			{
-				//get magintude diff
-				float oldMag = Vector3.Magnitude(_FocuspointsPrev [0] - _FocuspointsPrev [1]);
-				float newMag = Vector3.Magnitude(_Focuspoints [0] - _Focuspoints [1]);
-				float factor = newMag / oldMag;
-
-				//correction part 1 - get current localpos for focuspoints
-				List<Vector3> localPointsPreTransform = new List<Vector3> ();
-				foreach (Vector3 pos in _Focuspoints)
-				{
-					localPointsPreTransform.Add(trans.InverseTransformPoint (pos));
-				}
-				Vector3 averagePreTransform = GetAverage(_Focuspoints);
-
-				//scale
-				trans.localScale = new Vector3 (factor * trans.localScale.x, factor * trans.localScale.y, factor * trans.localScale.z);
-
-				//correction part 2 - get worldpoints for converted focuspoints and check diff 
-				List<Vector3> localPointsPostTransform = new List<Vector3> ();
-				for(int i = 0; i < localPointsPreTransform.Count; i++)
-				{
-					localPointsPostTransform.Add(trans.TransformPoint(localPointsPreTransform[i]));
-				}
-				Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
-
-				Vector3 correction = averagePostTransform -averagePreTransform;
-
-				trans.Translate (-correction, Space.World);
+				return;
 			}
+
+			//get magintude diff
+			float oldMag = Vector3.Magnitude(C[0].cursor.prevPos - C[1].cursor.prevPos);
+			float newMag = Vector3.Magnitude(C[0].cursor.curPos - C[1].cursor.curPos);
+			float factor = newMag / oldMag;
+
+			//correction part 1 - get current global pos and localpos for focuspoints
+			Vector3[] localPointsPreTransform = new Vector3[] {
+				trans.InverseTransformPoint (C[0].cursor.curPos),
+				trans.InverseTransformPoint (C[1].cursor.curPos)
+			};
+			Vector3 averagePreTransform = GetAverage( new Vector3[] {C[0].cursor.curPos,C[1].cursor.curPos} );
+
+			//scale
+			trans.localScale = new Vector3 (factor * trans.localScale.x, factor * trans.localScale.y, factor * trans.localScale.z);
+
+			//correction part 2 - get worldpoints for converted focuspoints and check diff 
+			Vector3[] localPointsPostTransform = new Vector3[] {
+				trans.TransformPoint(localPointsPreTransform[0]),
+				trans.TransformPoint(localPointsPreTransform[1])
+			};
+			Vector3 averagePostTransform = GetAverage (localPointsPostTransform);
+
+			Vector3 correction = averagePostTransform - averagePreTransform;
+			trans.Translate (-correction, Space.World);
+		}
+	
+	}
+
+	private void SetTarget(){
+		if (SelectionController._Selection.Count > 0)
+		{
+			if (SelectionController._Selection.Count > _TargetTransforms.Count)
+			{
+				_TargetTransforms.Clear ();
+				foreach (Transform trans in SelectionController._Selection)
+				{
+					_TargetTransforms.Add (trans);
+				}
+			}
+		} else
+		{
+			_TargetTransforms.Clear ();
 		}
 	}
 
-	public void UpdateFocusPoints(){
-		//_FocuspointsPrev = _Focuspoints;
+	private void Enable(){
+		movementEnabled = true;
+	}
 
-		_FocuspointsPrev.Clear();
-		foreach (Vector3 pos in _Focuspoints)
+	private void Disable(){
+		movementEnabled = false;
+		foreach (WandController C in InputController.controllers)
 		{
-			_FocuspointsPrev.Add (pos);
+			C.cursor.SetCursorState (CursorController.CursorState.unlocked);
 		}
+	}
 
-		_Focuspoints.Clear();
-		_ActiveCursor.Clear ();
-		_ActiveWand.Clear ();
+	private void SetCursorState(WandController[] C){
+		if (!movementEnabled)
+			return;
 
-		if (_WCL.triggerPress)
+		foreach (WandController cont in C)
 		{
-			_Focuspoints.Add (_WCL._Cursor.position);
-			_ActiveCursor.Add (_WCL._Cursor.gameObject);
-			_ActiveWand.Add (_WCL);
+			if (cont.triggerPress)
+			{
+				if (InputController.activeTriggers > 1)
+				{
+					cont.cursor.SetCursorState (CursorController.CursorState.lockRad);
+				} else
+				{
+					cont.cursor.SetCursorState (CursorController.CursorState.lockRad);
+				}
+			} else
+			{
+				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
+			}
 		}
-		if (_WCR.triggerPress)
-		{
-			_Focuspoints.Add (_WCR._Cursor.position);
-			_ActiveCursor.Add (_WCR._Cursor.gameObject);
-			_ActiveWand.Add (_WCR);
-		}
-
-		_ChangeInFocusPointSize = _Focuspoints.Count == _FocuspointsPrev.Count ? false : true;
 	}
 
 	private Vector3 GetAverage(List<Vector3> list){
@@ -197,5 +237,14 @@ public class ObjectMovement : MonoBehaviour {
 		averagePoint /= list.Count;
 		return averagePoint;
 	}
-*/
+
+	private Vector3 GetAverage(Vector3[] list){
+		Vector3 averagePoint = new Vector3();
+		foreach (Vector3 pos in list)
+		{
+			averagePoint += pos;
+		}
+		averagePoint /= list.Length;
+		return averagePoint;
+	}
 }

@@ -60,7 +60,6 @@ public class ObjectBounds : MonoBehaviour {
 		Vector3 v3BackBottomLeft   = new Vector3(v3Center.x - v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z);  // Back bottom left corner
 		Vector3 v3BackBottomRight  = new Vector3(v3Center.x + v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z);  // Back bottom right corner
 
-		Debug.Log (rend);
 
 		drawLine (v3FrontTopLeft, v3FrontTopRight, col, _BoundWidth, _BoundingBox);
 		drawLine (v3BackTopRight , v3FrontTopRight, col, _BoundWidth, _BoundingBox);
