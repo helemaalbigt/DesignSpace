@@ -197,4 +197,9 @@ public class GlobalMovement : MonoBehaviour {
 		averagePoint /= list.Length;
 		return averagePoint;
 	}
+
+	public void SetScale(float scale){
+		float value = 1f / scale;
+		_GlobalWrapper.localScale = new Vector3 (value, value, value);
+	}
 }
