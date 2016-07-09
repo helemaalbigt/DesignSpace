@@ -10,8 +10,8 @@ public class MenuButton : MonoBehaviour {
 	protected Image _Highlight;
 	protected Image _Background;
 
-	private float _HoverOffTime = 0.05f;
-	private float _LastHoverTimestamp;
+	protected float _HoverOffTime = 0.05f;
+	protected float _LastHoverTimestamp;
 	protected bool _IsHoveredOn = false;
 
 	// Use this for initialization
@@ -43,13 +43,13 @@ public class MenuButton : MonoBehaviour {
 	}
 
 
-	public void HoverOff(){
+	protected void HoverOff(){
 		_IsHoveredOn = false;
 		_Highlight.enabled = false;
 	}
 
 
-	IEnumerator HoverOffCount(){
+	protected IEnumerator HoverOffCount(){
 		while (Time.time - _LastHoverTimestamp < _HoverOffTime)
 		{
 			yield return null;

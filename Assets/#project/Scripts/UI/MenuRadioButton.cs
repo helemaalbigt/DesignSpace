@@ -19,14 +19,34 @@ public class MenuRadioButton: MenuCheckbox {
 	}
 
 	public void HoverOn(WandController C){
+		
 		if (C.triggerDown)
 		{
 			if (!_IsSelected)
 			{
-				Select();
+				Select ();
+			} else
+			{
+				Deselect ();
 			}
 		}
 
+
+		//copypasta from parent parent class - resolve this better in the future
+		//*_LastHoverTimestamp = Time.time;
+		_LastHoverTimestamp = Time.time;
+		if (!_IsHoveredOn)
+		{
+			_IsHoveredOn = true;
+			StartCoroutine (HoverOffCount ());
+		}
+
+		_Highlight.enabled = true;
+
+		if (C.triggerDown)
+		{
+			_Click.Invoke ();
+		}
 	}
 		
 	public void Select(){
