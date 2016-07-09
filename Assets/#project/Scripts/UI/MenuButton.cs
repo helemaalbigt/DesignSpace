@@ -20,11 +20,11 @@ public class MenuButton : MonoBehaviour {
 		_Background = GetComponent<Image>();
 		_Highlight.enabled = _IsHoveredOn;
 	}
+
 	void OnDisable(){
 		HoverOff ();
 	}
-
-
+		
 	public void HoverOn(WandController C){
 
 		_LastHoverTimestamp = Time.time;

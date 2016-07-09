@@ -11,7 +11,7 @@ public class MenuCheckbox: MenuButton {
 	protected bool _IsSelected = false;
 	public Color _NeutralColor = new Color(255f,255f,255f,55f);
 	public Color _SelectedColor = new Color(50f,130f,255f,55f);
-		
+
 	public void HoverOn(WandController C){
 		base.HoverOn(C);
 		if (C.triggerDown)
