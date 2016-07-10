@@ -16,6 +16,8 @@ public class WandController : MonoBehaviour {
 
 	public static List<WandController> controllers = new List<WandController>();
 
+	public bool inUse = false;
+
 	[Header("POINTER PARAMS")]
 	public float _RayRange;
 	public Transform _PointerAnchor;

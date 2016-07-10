@@ -43,6 +43,8 @@ public class GlobalMovement : MonoBehaviour {
 	}
 
 	private void DoTranslate(WandController[] C){
+		if (InputController.inUse)
+			return;
 		
 		//skip a frame when changing states to avoid jumpy translations
 		if (C[0].gripDown || C[1].gripDown || C[1].gripUp || C[0].gripUp ||
@@ -72,9 +74,13 @@ public class GlobalMovement : MonoBehaviour {
 		{
 			trans.Translate (diff, Space.World);
 		}
+			
 	}
 
 	private void DoRotate(WandController[] C){
+
+		if (InputController.inUse)
+			return;
 
 		foreach (Transform trans in _TargetTransforms)
 		{
@@ -117,10 +123,13 @@ public class GlobalMovement : MonoBehaviour {
 			Vector3 correction = averagePostTransform -averagePreTransform;
 			trans.Translate (-correction, Space.World);
 		}
-
+			
 	}
 
 	private void DoScale(WandController[] C){
+
+		if (InputController.inUse)
+			return;
 
 		foreach (Transform trans in _TargetTransforms)
 		{
@@ -156,10 +165,14 @@ public class GlobalMovement : MonoBehaviour {
 			Vector3 correction = averagePostTransform -averagePreTransform;
 			trans.Translate (-correction, Space.World);
 		}
-	
+			
 	}
 
 	private void SetCursorState(WandController[] C){
+
+		if (InputController.inUse)
+			return;
+
 		foreach (WandController cont in C)
 		{
 			if (cont.gripPress)
@@ -176,6 +189,7 @@ public class GlobalMovement : MonoBehaviour {
 				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
 			}
 		}
+			
 	}
 
 	private Vector3 GetAverage(List<Vector3> list){

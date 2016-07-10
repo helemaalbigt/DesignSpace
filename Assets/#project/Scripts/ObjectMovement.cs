@@ -56,9 +56,10 @@ public class ObjectMovement : MonoBehaviour {
 	}
 
 	private void DoTranslate(WandController[] C){
-		if (!movementEnabled)
+
+		if (InputController.inUse)
 			return;
-		
+
 		//skip a frame when changing states to avoid jumpy translations
 		if (C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)
 		{
@@ -88,12 +89,14 @@ public class ObjectMovement : MonoBehaviour {
 		{
 			trans.Translate (diff, Space.World);
 		}
+			
 	}
 
 	private void DoRotate(WandController[] C){
-		if (!movementEnabled)
+
+		if (InputController.inUse)
 			return;
-		
+
 		foreach (Transform trans in _TargetTransforms)
 		{
 			//skip a frame when changing states to avoid jumpy translations
@@ -105,7 +108,8 @@ public class ObjectMovement : MonoBehaviour {
 			//get rot angle and axis
 			Vector3 oldDir = C[0].cursor.prevPos - C[1].cursor.prevPos;
 			Vector3 newDir = C[0].cursor.curPos - C[1].cursor.curPos;
-			if (true)
+
+			if(!(C[1].hitObj.tag == "Image"))
 			{
 				oldDir = new Vector3 (oldDir.x, 0, oldDir.z);
 				newDir = new Vector3 (newDir.x, 0, newDir.z);
@@ -134,11 +138,12 @@ public class ObjectMovement : MonoBehaviour {
 			Vector3 correction = averagePostTransform -averagePreTransform;
 			trans.Translate (-correction, Space.World);
 		}
-
+			
 	}
 
 	private void DoScale(WandController[] C){
-		if (!movementEnabled)
+
+		if (InputController.inUse)
 			return;
 
 		foreach (Transform trans in _TargetTransforms)
@@ -174,7 +179,7 @@ public class ObjectMovement : MonoBehaviour {
 			Vector3 correction = averagePostTransform - averagePreTransform;
 			trans.Translate (-correction, Space.World);
 		}
-	
+			
 	}
 
 	private void SetTarget(){
@@ -207,7 +212,8 @@ public class ObjectMovement : MonoBehaviour {
 	}
 
 	private void SetCursorState(WandController[] C){
-		if (!movementEnabled)
+
+		if (InputController.inUse)
 			return;
 
 		foreach (WandController cont in C)

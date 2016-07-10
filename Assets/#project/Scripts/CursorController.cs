@@ -27,7 +27,7 @@ public class CursorController : MonoBehaviour {
 	public Vector3 curPos;
 	public Vector3 prevPos;
 
-	void Staert(){
+	void Start(){
 		SetCursorState (CursorState.unlocked);
 	}
 
@@ -104,6 +104,9 @@ public class CursorController : MonoBehaviour {
 	}
 
 	public void SetCursorState(CursorState state){
+		if (InputController.inUse)
+			return; 
+		
 		_CursorState = state;
 
 		if (state == CursorState.unlocked) {
@@ -124,6 +127,14 @@ public class CursorController : MonoBehaviour {
 		_StateChangeDistance = _WandController.hitDistance;
 		_StateChangePos = _Cursor.transform.position;
 		_StateChangeRot = _Cursor.transform.rotation;
+	}
+
+	public void SetDrawLock(){
+		UpdateCursorTransformState ();
+		_StateChangeDistance = 0.01f;
+
+		_CursorState = CursorState.lockRad;
+		locked = true;
 	}
 }
 

@@ -3,7 +3,9 @@ using UnityEngine;
 using System;
 
 public class InputController : MonoBehaviour {
-	
+
+	public static bool inUse = false;
+
 	//Controller references
 	public WandController left;
 	public WandController right;

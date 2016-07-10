@@ -1,0 +1,155 @@
+Initialize engine version: 5.3.4p1 (e89f89413a91)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     4059 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.045 seconds
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\MyDocuments\2016\Learn and Leisure\Unity\01 personal\PreviewVR\Build\DesignBuild v0\DesignSpace_0_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initialized touch support.
+UnloadTime: 1.013471 ms
+Connected to lighthouse:LHR-F6CB9E5F
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Model override is really only meant to be used in the scene view for lining things up; using it at runtime is discouraged.  Use tracked device index instead to ensure the correct model is displayed for all users.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Model override is really only meant to be used in the scene view for lining things up; using it at runtime is discouraged.  Use tracked device index instead to ensure the correct model is displayed for all users.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+UnityEngine.GameObject:SetActive(Boolean)
+UnityEngine.Events.InvokableCall`1:Invoke(Object[])
+UnityEngine.Events.CachedInvokableCall`1:Invoke(Object[])
+UnityEngine.Events.InvokableCallList:Invoke(Object[])
+UnityEngine.Events.UnityEventBase:Invoke(Object[])
+UnityEngine.Events.UnityEvent:Invoke()
+MenuCheckbox:Deselect()
+MenuRadioButton:Select()
+MenuRadioButton:HoverOn(WandController)
+UnityEngine.GameObject:SendMessage(String, Object, SendMessageOptions)
+UnityEngine.GameObject:SendMessage(String, Object)
+WandController:UpdatePointer()
+WandController:Update()
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+UnityEngine.GameObject:SetActive(Boolean)
+UnityEngine.Events.InvokableCall`1:Invoke(Object[])
+UnityEngine.Events.CachedInvokableCall`1:Invoke(Object[])
+UnityEngine.Events.InvokableCallList:Invoke(Object[])
+UnityEngine.Events.UnityEventBase:Invoke(Object[])
+UnityEngine.Events.UnityEvent:Invoke()
+MenuCheckbox:Deselect()
+MenuRadioButton:Select()
+MenuRadioButton:HoverOn(WandController)
+UnityEngine.GameObject:SendMessage(String, Object, SendMessageOptions)
+UnityEngine.GameObject:SendMessage(String, Object)
+WandController:UpdatePointer()
+WandController:Update()
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+UnityEngine.GameObject:SetActive(Boolean)
+UnityEngine.Events.InvokableCall`1:Invoke(Object[])
+UnityEngine.Events.CachedInvokableCall`1:Invoke(Object[])
+UnityEngine.Events.InvokableCallList:Invoke(Object[])
+UnityEngine.Events.UnityEventBase:Invoke(Object[])
+UnityEngine.Events.UnityEvent:Invoke()
+MenuCheckbox:Deselect()
+MenuRadioButton:Select()
+MenuRadioButton:HoverOn(WandController)
+UnityEngine.GameObject:SendMessage(String, Object, SendMessageOptions)
+UnityEngine.GameObject:SendMessage(String, Object)
+WandController:UpdatePointer()
+WandController:Update()
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+UnityEngine.GameObject:SetActive(Boolean)
+UnityEngine.Events.InvokableCall`1:Invoke(Object[])
+UnityEngine.Events.CachedInvokableCall`1:Invoke(Object[])
+UnityEngine.Events.InvokableCallList:Invoke(Object[])
+UnityEngine.Events.UnityEventBase:Invoke(Object[])
+UnityEngine.Events.UnityEvent:Invoke()
+MenuCheckbox:Deselect()
+MenuRadioButton:Select()
+MenuRadioButton:HoverOn(WandController)
+UnityEngine.GameObject:SendMessage(String, Object, SendMessageOptions)
+UnityEngine.GameObject:SendMessage(String, Object)
+WandController:UpdatePointer()
+WandController:Update()
+ 
+(Filename:  Line: -1)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 20 -> priority: 1 
+  Thread -> id: 964 -> priority: 1 
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException
+  at (wrapper managed-to-native) UnityEngine.Behaviour:set_enabled (bool)
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException
+  at (wrapper managed-to-native) UnityEngine.Behaviour:set_enabled (bool)
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at MenuButton.HoverOff () [0x00000] in <filename unknown>:0 
+  at MenuButton.OnDisable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+

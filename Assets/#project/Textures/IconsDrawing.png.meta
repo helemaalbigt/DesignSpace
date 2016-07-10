@@ -1,0 +1,222 @@
+fileFormatVersion: 2
+guid: 9d24bcda9556d0e4b9297bbc42c7d4fb
+timeCreated: 1468094186
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: IconsDrawing_0
+    21300002: IconsDrawing_1
+    21300004: IconsDrawing_2
+    21300006: IconsDrawing_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: IconsDrawing_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: -31}
+        - {x: -13, y: -41}
+        - {x: -13, y: -100}
+        - {x: -9, y: -112}
+        - {x: 37, y: -112}
+        - {x: 42, y: -109}
+        - {x: 42, y: -42}
+        - {x: 31, y: -31}
+      - - {x: 105, y: -31}
+        - {x: 50, y: -31}
+        - {x: 50, y: -111}
+        - {x: 95, y: -111}
+        - {x: 107, y: -110}
+        - {x: 117, y: -90}
+        - {x: 117, y: -59}
+        - {x: 115, y: -49}
+      - - {x: -91, y: -48}
+        - {x: -93, y: -48}
+        - {x: -96, y: -49}
+        - {x: -102, y: -77}
+        - {x: -102, y: -104}
+        - {x: -53, y: -104}
+        - {x: -46, y: -98}
+        - {x: -46, y: -93}
+        - {x: -47, y: -90}
+      - - {x: 37, y: 80}
+        - {x: 33, y: 80}
+        - {x: -89, y: -43}
+        - {x: -89, y: -46}
+        - {x: -47, y: -92}
+        - {x: -27, y: -92}
+        - {x: 83, y: 17}
+        - {x: 83, y: 43}
+        - {x: 51, y: 76}
+      - - {x: 47, y: 102}
+        - {x: 40, y: 89}
+        - {x: 40, y: 81}
+        - {x: 83, y: 37}
+        - {x: 87, y: 37}
+        - {x: 105, y: 49}
+        - {x: 105, y: 82}
+        - {x: 77, y: 102}
+    - name: IconsDrawing_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: -31}
+        - {x: -18, y: -33}
+        - {x: -18, y: -111}
+        - {x: 36, y: -111}
+        - {x: 36, y: -31}
+      - - {x: 100, y: -31}
+        - {x: 45, y: -31}
+        - {x: 45, y: -111}
+        - {x: 90, y: -111}
+        - {x: 102, y: -110}
+        - {x: 112, y: -90}
+        - {x: 112, y: -59}
+        - {x: 110, y: -49}
+      - - {x: -98, y: -48}
+        - {x: -104, y: -77}
+        - {x: -104, y: -104}
+        - {x: -89, y: -104}
+        - {x: -49, y: -98}
+        - {x: -48, y: -95}
+        - {x: -48, y: -92}
+        - {x: -93, y: -48}
+      - - {x: 35, y: 80}
+        - {x: 31, y: 80}
+        - {x: -91, y: -43}
+        - {x: -91, y: -46}
+        - {x: -49, y: -92}
+        - {x: -29, y: -92}
+        - {x: 81, y: 33}
+        - {x: 81, y: 41}
+        - {x: 49, y: 76}
+      - - {x: 45, y: 102}
+        - {x: 38, y: 89}
+        - {x: 38, y: 81}
+        - {x: 81, y: 37}
+        - {x: 85, y: 37}
+        - {x: 103, y: 49}
+        - {x: 103, y: 82}
+        - {x: 75, y: 102}
+    - name: IconsDrawing_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 103, y: -32}
+        - {x: 50, y: -32}
+        - {x: 32, y: -37}
+        - {x: 32, y: -106}
+        - {x: 52, y: -112}
+        - {x: 96, y: -112}
+        - {x: 113, y: -98}
+        - {x: 113, y: -48}
+        - {x: 111, y: -37}
+      - - {x: -5, y: 102}
+        - {x: -105, y: 61}
+        - {x: -105, y: -64}
+        - {x: -104, y: -64}
+        - {x: -9, y: -108}
+        - {x: 91, y: -108}
+        - {x: 100, y: -57}
+        - {x: 100, y: 79}
+        - {x: 7, y: 102}
+    - name: IconsDrawing_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 117, y: 96}
+        - {x: 16, y: 118}
+        - {x: -15, y: 118}
+        - {x: -92, y: 90}
+        - {x: -107, y: 51}
+        - {x: -107, y: -102}
+        - {x: -73, y: -118}
+        - {x: 48, y: -118}
+        - {x: 99, y: -86}
+        - {x: 117, y: -41}
+      - - {x: 107, y: -32}
+        - {x: 54, y: -32}
+        - {x: 36, y: -37}
+        - {x: 36, y: -106}
+        - {x: 56, y: -112}
+        - {x: 100, y: -112}
+        - {x: 117, y: -98}
+        - {x: 117, y: -48}
+        - {x: 115, y: -37}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
