@@ -33,7 +33,7 @@ public class CreateCube : MenuCheckbox
 
 		while (!C.triggerDown)
 		{
-			Debug.Log ("Waiting fir first point");
+			Debug.Log ("Waiting for first point");
 
 			cube.position = C.cursor.curPos;
 			cube.rotation = Quaternion.LookRotation (C.hitNorm);
@@ -47,17 +47,23 @@ public class CreateCube : MenuCheckbox
 
 		yield return null;
 
+		cube.localScale = new Vector3 (
+			-cube.localScale.x,
+			cube.localScale.y,
+			cube.localScale.z
+		);
+
 		while (!C.triggerDown)
 		{
 			Debug.Log ("Waiting for second point");
 
-			cube.right = C.cursor.curPos - _Points [0];
+			cube.rotation = Quaternion.LookRotation (C.cursor.curPos - _Points [0], C.hitNorm);
 			cube.localScale = new Vector3 (
-				Vector3.Distance(C.cursor.curPos, _Points [0]) / _GlobalWrapper.localScale.x,
+				cube.localScale.x,
 				cube.localScale.y,
-				cube.localScale.z
+				Vector3.Distance(C.cursor.curPos, _Points [0]) / _GlobalWrapper.localScale.x
 			);
-			cube.rotation = Quaternion.Euler(0, cube.rotation.eulerAngles.y, cube.rotation.eulerAngles.z);
+			//cube.rotation = Quaternion.Euler(0, cube.rotation.eulerAngles.y, cube.rotation.eulerAngles.z);
 
 			yield return null;
 		}
@@ -69,12 +75,16 @@ public class CreateCube : MenuCheckbox
 		while(!C.triggerDown)
 		{
 			Debug.Log ("Waiting for third point");
-			Vector3 cross = Vector3.Cross (_Points [1] - _Points [0], _Points [1] - C.cursor.curPos).normalized;
-			Debug.Log (Vector3.Magnitude (cross));
+
+			float sign = (Vector3.Angle(_Points [1] - C.cursor.curPos, cube.right)) <= 90f ? -1f : 1f; //determine sign by position of cursor relative to cube right direction
+
+			Vector3 cursorPosDelta = C.cursor.curPos - _Points [1];
+			Vector3 deltaProjected = Vector3.Project (cursorPosDelta, cube.right);
+
 			cube.localScale = new Vector3 (
-				cube.localScale.x,
+				sign*( Vector3.Magnitude(deltaProjected) / _GlobalWrapper.localScale.x ),
 				cube.localScale.y,
-				( Vector3.Distance(C.cursor.curPos, _Points [1]) / _GlobalWrapper.localScale.x ) //* Vector3.Magnitude(cross)
+				cube.localScale.z//* Vector3.Magnitude(cross)
 			);
 
 			yield return null;
@@ -82,6 +92,7 @@ public class CreateCube : MenuCheckbox
 
 		_Points [2] = C.cursor.curPos;
 		Vector3 wandpos = C.transform.position;
+		//float wandDistPre = Vector3.Distance (_Points [2], C.transform.position); //distance between wand and point 2 before positioning
 
 		yield return null;
 
@@ -89,9 +100,14 @@ public class CreateCube : MenuCheckbox
 		{
 			Debug.Log ("Waiting for fourth point");
 
+			float sign = (Vector3.Angle(C.transform.position -  wandpos, cube.up)) <= 90f ? 1f : -1f;
+
+			Vector3 controllerPosDelta = C.transform.position - wandpos; //vector from pos controller at start extrusion to cur pos
+			Vector3 deltaProjected = Vector3.Project (controllerPosDelta, cube.up); //projected on up direction
+
 			cube.localScale = new Vector3 (
 				cube.localScale.x,
-				Vector3.Distance(wandpos, C.transform.position) / _GlobalWrapper.localScale.x,
+				sign*Vector3.Magnitude(deltaProjected) / _GlobalWrapper.localScale.x,
 				cube.localScale.z
 			);
 
@@ -107,6 +123,8 @@ public class CreateCube : MenuCheckbox
 		BoxCollider col = childCube.AddComponent<BoxCollider>();
 		//col.center = new Vector3(0.5f, 0.5f, 0.5f);
 		childCube.layer = LayerMask.NameToLayer ("Model");
+
+		yield return null;
 
 		//end drawing
 		InputController.inUse = false;

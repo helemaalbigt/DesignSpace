@@ -22,6 +22,9 @@ public class SelectionController : MonoBehaviour {
 		
 	private void ManageSelection(WandController[] cont){
 
+		if (InputController.inUse)
+			return;
+
 		foreach (WandController C in cont)
 		{
 			if (!C.triggerPress || !C.triggerDown || C.hitObj == null)

@@ -43,8 +43,8 @@ public class GlobalMovement : MonoBehaviour {
 	}
 
 	private void DoTranslate(WandController[] C){
-		if (InputController.inUse)
-			return;
+		//if (InputController.inUse)
+			//return;
 		
 		//skip a frame when changing states to avoid jumpy translations
 		if (C[0].gripDown || C[1].gripDown || C[1].gripUp || C[0].gripUp ||
@@ -79,8 +79,8 @@ public class GlobalMovement : MonoBehaviour {
 
 	private void DoRotate(WandController[] C){
 
-		if (InputController.inUse)
-			return;
+		//if (InputController.inUse)
+			//return;
 
 		foreach (Transform trans in _TargetTransforms)
 		{
@@ -128,8 +128,8 @@ public class GlobalMovement : MonoBehaviour {
 
 	private void DoScale(WandController[] C){
 
-		if (InputController.inUse)
-			return;
+		//if (InputController.inUse)
+			//return;
 
 		foreach (Transform trans in _TargetTransforms)
 		{
@@ -170,11 +170,14 @@ public class GlobalMovement : MonoBehaviour {
 
 	private void SetCursorState(WandController[] C){
 
-		if (InputController.inUse)
-			return;
-
 		foreach (WandController cont in C)
 		{
+			if (InputController.inUse)
+			{
+				cont.cursor.SetDrawLock ();
+				return;
+			}
+
 			if (cont.gripPress)
 			{
 				if (InputController.activeGrips > 1)
@@ -188,6 +191,7 @@ public class GlobalMovement : MonoBehaviour {
 			{
 				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
 			}
+
 		}
 			
 	}

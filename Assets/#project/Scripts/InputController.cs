@@ -49,6 +49,7 @@ public class InputController : MonoBehaviour {
 
 	void Start(){
 		controllers = new WandController[] { left, right };
+		inUse = false;
 	}
 
 

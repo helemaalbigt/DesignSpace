@@ -28,6 +28,9 @@ public class LineDrawer : MenuCheckbox
 			Debug.Log ("Start");
 			targetC = C;
 			C.cursor.SetDrawLock ();
+			foreach(WandController cont in InputController.controllers){
+				cont.cursor.SetDrawLock ();
+			}
 			InvokeRepeating("CreateLines",0f,0.015f);
 		}
 
@@ -38,6 +41,9 @@ public class LineDrawer : MenuCheckbox
 			Debug.Log ("Stop");
 			CancelInvoke();
 			C.cursor.SetCursorState (CursorController.CursorState.unlocked);
+			foreach(WandController cont in InputController.controllers){
+				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
+			}
 			isClicked = false;
 		}
 	}
