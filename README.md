@@ -14,5 +14,5 @@ Trigger buttons: click buttons, select objects, move/scale/rotate objects
 
 ## Credits
 
-AEC hackathon team: Carlos de la Barrera, Lorenzo Greco, Thomas Phillips, Thomas Van Bouwel
+AEC hackathon team: Carlos de la Barrera, Lorenzo Greco, Thomas Phillips, Thomas Van Bouwel <br>
 3D Model London: Michal Konicek - Vertex Modelling
