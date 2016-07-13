@@ -31,7 +31,7 @@ public class LineDrawer : MenuCheckbox
 			foreach(WandController cont in InputController.controllers){
 				cont.cursor.SetDrawLock ();
 			}
-			InvokeRepeating("CreateLines",0f,0.015f);
+			InvokeRepeating("CreateLines",0.2f,0.015f);
 		}
 
 		if (!_IsSelected && C.triggerDown)
