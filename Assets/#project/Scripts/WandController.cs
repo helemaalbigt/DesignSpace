@@ -138,7 +138,7 @@ public class WandController : MonoBehaviour {
 			hitDistance = _Hit.distance;
 			rayHitModel = hitLayer == LayerMask.NameToLayer ("Model") ? true : false;
 
-			_Hit.transform.gameObject.SendMessage ("HoverOn", this);
+			_Hit.transform.gameObject.SendMessage ("HoverOn", this, SendMessageOptions.RequireReceiver);
 		} else {
 			rayHit = false;
 		}
