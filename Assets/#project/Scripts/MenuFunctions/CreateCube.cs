@@ -126,6 +126,8 @@ public class CreateCube : MenuCheckbox
 
 		yield return null;
 
+		Deselect ();
+
 		//end drawing
 		InputController.inUse = false;
 		_IsSelected = false;

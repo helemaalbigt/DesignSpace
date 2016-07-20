@@ -14,7 +14,7 @@ public class AxisController : MonoBehaviour {
 		if (WC.triggerDown)
 		{
 			WC.Vibrate (2000);
-			_GlobalWrapper.rotation = Quaternion.identity;
+			_GlobalWrapper.localRotation = Quaternion.identity;
 		}
 
 		if (WC.doubleClick)

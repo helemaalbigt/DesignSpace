@@ -8,9 +8,13 @@ public class MenuCheckbox: MenuButton {
 	public UnityEvent _ClickOn;
 	public UnityEvent _ClickOff;
 
-	protected bool _IsSelected = false;
+	public bool _IsSelected = false;
 	public Color _NeutralColor = new Color(255f,255f,255f,55f);
 	public Color _SelectedColor = new Color(50f,130f,255f,55f);
+
+	public void Start(){
+		base.Start ();
+	}
 
 	public void HoverOn(WandController C){
 		base.HoverOn(C);

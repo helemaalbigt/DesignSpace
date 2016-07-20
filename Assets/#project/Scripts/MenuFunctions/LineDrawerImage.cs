@@ -32,11 +32,7 @@ public class LineDrawerImage : MenuCheckbox
 
 		if (!_IsSelected && C.triggerDown)
 		{
-			InputController.inUse = false;
-
-			Debug.Log ("Stop");
-			CancelInvoke();
-			isClicked = false;
+			StopSketching ();
 		}
 	}
 
@@ -84,4 +80,12 @@ public class LineDrawerImage : MenuCheckbox
         lr.SetVertexCount(positions.Count);
         lr.SetPosition(positions.Count - 1, pos);
     }
+
+	public void StopSketching(){
+		InputController.inUse = false;
+
+		Debug.Log ("Stop");
+		CancelInvoke();
+		isClicked = false;
+	}
 }

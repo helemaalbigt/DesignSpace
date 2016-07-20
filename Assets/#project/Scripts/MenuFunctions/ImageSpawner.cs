@@ -18,6 +18,7 @@ public class ImageSpawner : MenuButton {
 	public void HoverOn(WandController C){
 		if (C.triggerDown)
 		{
+			InputController.inUse = true;
 			StartCoroutine(Spawn (C));
 		}
 	}
@@ -31,7 +32,7 @@ public class ImageSpawner : MenuButton {
 		imageSpawn.transform.forward = C.hitNorm;
 		imageSpawn.transform.localPosition = new Vector3(0,0.05f,0);
 		float f = 1000f;
-		imageSpawn.transform.localScale = new Vector3 (f,f,0.1f);
+		imageSpawn.transform.localScale = new Vector3 (-f,f,0.1f);
 
 		SpriteRenderer SR = imageSpawn.AddComponent<SpriteRenderer>();
 		SR.sprite = _Image;
@@ -56,6 +57,8 @@ public class ImageSpawner : MenuButton {
 		BC.size = new Vector3 (BC.size.x, BC.size.y, 0.1f);
 
 		imageSpawn.AddComponent<Geometry> ();
+
+		InputController.inUse = false;
 	}
 
 	private Transform FindParent(Transform hit){

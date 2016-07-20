@@ -14,11 +14,13 @@ public class MenuButton : MonoBehaviour {
 	protected float _LastHoverTimestamp;
 	protected bool _IsHoveredOn = false;
 
+
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		_Highlight = transform.Find("ButtonHighlight").GetComponent<Image>();
 		_Background = GetComponent<Image>();
-		_Highlight.enabled = _IsHoveredOn;
+		if(_Highlight != null)
+			_Highlight.enabled = _IsHoveredOn;
 	}
 
 	void OnDisable(){
@@ -45,7 +47,8 @@ public class MenuButton : MonoBehaviour {
 
 	protected void HoverOff(){
 		_IsHoveredOn = false;
-		_Highlight.enabled = false;
+		if(_Highlight != null)
+			_Highlight.enabled = false;
 	}
 
 

@@ -8,6 +8,10 @@ public class SelectionController : MonoBehaviour {
 	public static event Action OnSelectionChange; //an object is added to _Selection
 	public static event Action OnSelectionCancel; //_Selection is cleared
 
+	private void Start(){
+		_Selection.Clear ();
+	}
+
 	private void OnEnable(){
 		//InputController.OnRayOnModel += ManageSelection;
 		InputController.OnOneTrigger += ManageSelection;

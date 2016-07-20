@@ -42,6 +42,9 @@ public class WandController : MonoBehaviour {
 	public Vector3 hitNorm;
 	public Vector3 hitNormPrev;
 
+	public Vector3 pointerPos;		//location of pointer anchor
+	public Vector3 pointerPosPrev; 	//location of pointer anchor in previous frame
+
 	[Header("BUTTON READOUT")]
 	public bool gripDown = false;
 	public bool gripUp = false;
@@ -120,6 +123,9 @@ public class WandController : MonoBehaviour {
 	}
 
 	private void UpdatePointer (){
+
+		pointerPosPrev = pointerPos;
+		pointerPos = _PointerAnchor.position;
 
 		hitPosPrev = hitPos;
 		hitNormPrev = hitNorm;

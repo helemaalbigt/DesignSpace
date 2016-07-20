@@ -1,0 +1,12 @@
+# Blender MTL File: 'LOD3_Sample.fbx'
+# Material Count: 1
+
+newmtl Material_1
+Ns 498.039216
+Ka 1.000000 1.000000 1.000000
+Kd 0.599216 0.800000 0.398431
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

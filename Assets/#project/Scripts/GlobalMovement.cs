@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GlobalMovement : MonoBehaviour {
 
 	public Transform _GlobalWrapper;
+	public Transform _TableCenter;
 	private List<Transform> _TargetTransforms = new List<Transform> ();
 
 	private List<Vector3> _Focuspoints = new List<Vector3> ();
@@ -45,7 +46,9 @@ public class GlobalMovement : MonoBehaviour {
 	private void DoTranslate(WandController[] C){
 		//if (InputController.inUse)
 			//return;
-		
+
+		Debug.Log (InputController.inUse);
+
 		//skip a frame when changing states to avoid jumpy translations
 		if (C[0].gripDown || C[1].gripDown || C[1].gripUp || C[0].gripUp ||
 			C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)
@@ -174,7 +177,7 @@ public class GlobalMovement : MonoBehaviour {
 		{
 			if (InputController.inUse)
 			{
-				cont.cursor.SetDrawLock ();
+				//cont.cursor.SetDrawLock ();
 				return;
 			}
 
@@ -216,8 +219,33 @@ public class GlobalMovement : MonoBehaviour {
 		return averagePoint;
 	}
 
+
+	/**
+	 * Scale the whole model relative to the tables center
+	 * 
+	 * @param
+	 * @return
+	 */
 	public void SetScale(float scale){
+		//old - scale relative to _GlobalScale origin
+		//float value = 1f / scale;
+		//_GlobalWrapper.localScale = new Vector3 (value, value, value);
+
+
+		//correction part 1 - get current global pos and localpos for focuspoints
+		Vector3 localPointsPreTransform = _GlobalWrapper.InverseTransformPoint(_TableCenter.position);
+
+		//scale
 		float value = 1f / scale;
 		_GlobalWrapper.localScale = new Vector3 (value, value, value);
+
+		//correction part 2 - get worldpoints for converted focuspoints and check diff 
+		Vector3 localPointsPostTransform = _GlobalWrapper.TransformPoint(localPointsPreTransform);
+
+		Vector3 correction = localPointsPostTransform - _TableCenter.position;
+		_GlobalWrapper.Translate (-correction, Space.World);
+
+		print (localPointsPreTransform);
+		print (localPointsPostTransform);
 	}
 }

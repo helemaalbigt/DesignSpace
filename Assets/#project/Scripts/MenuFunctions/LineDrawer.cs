@@ -36,15 +36,7 @@ public class LineDrawer : MenuCheckbox
 
 		if (!_IsSelected && C.triggerDown)
 		{
-			InputController.inUse = false;
-
-			Debug.Log ("Stop");
-			CancelInvoke();
-			C.cursor.SetCursorState (CursorController.CursorState.unlocked);
-			foreach(WandController cont in InputController.controllers){
-				cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
-			}
-			isClicked = false;
+			StopSketching ();
 		}
 	}
 
@@ -100,5 +92,17 @@ public class LineDrawer : MenuCheckbox
 			LineRenderer lr = obj.GetComponent<LineRenderer>();
 			lr.material = mat;
 		}
+	}
+
+	public void StopSketching(){
+		InputController.inUse = false;
+
+		Debug.Log ("Stop");
+		CancelInvoke();
+		targetC.cursor.SetCursorState (CursorController.CursorState.unlocked);
+		foreach(WandController cont in InputController.controllers){
+			cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
+		}
+		isClicked = false;
 	}
 }

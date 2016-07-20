@@ -7,6 +7,14 @@ using System.Collections.Generic;
 public class MenuRadioButton: MenuCheckbox {
 	
 	protected List<MenuRadioButton> _Buttons =  new List<MenuRadioButton>() ;
+	public bool _AlwaysOneSelected = false;
+
+	public void Start(){
+		base.Start ();
+
+		if(_IsSelected)
+			Select ();
+	}
 
 	public void Awake(){
 		foreach (Transform button in transform.parent)
@@ -27,7 +35,8 @@ public class MenuRadioButton: MenuCheckbox {
 				Select ();
 			} else
 			{
-				Deselect ();
+				if(!_AlwaysOneSelected)
+					Deselect ();
 			}
 		}
 

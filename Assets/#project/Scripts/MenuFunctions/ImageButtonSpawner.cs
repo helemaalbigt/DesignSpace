@@ -13,6 +13,7 @@ public class ImageButtonSpawner : MonoBehaviour {
 	public Text _NoImageText;
 
 	private string _FilePath;
+	public int _ClickableAtStart = 9;
 
 	// Use this for initialization
 	void Start(){
@@ -29,11 +30,15 @@ public class ImageButtonSpawner : MonoBehaviour {
 
 		//get all images from directory
 		List<Sprite> spriteList = new List<Sprite>();
+		List<string> files = new List<string> ();
 		var info = new DirectoryInfo(_FilePath);
 		var fileInfo = info.GetFiles();
+
 		foreach(var file in fileInfo){
 			if (file.Extension == ".jpg" || file.Extension == ".png")
 			{
+				files.Add (file.FullName);
+
 				//load image into texture and then into sprite 
 				var bytes = System.IO.File.ReadAllBytes(file.FullName);
 				Texture2D image = new Texture2D (1, 1);
@@ -44,10 +49,15 @@ public class ImageButtonSpawner : MonoBehaviour {
 
 		//Sprite[] sprites = Resources.LoadAll <Sprite> ("Images"); //old
 
-		if (spriteList.Count == 0)
+		if (files.Count == 0)
 		{
-			_NoImageText.text = "Place reference images in: \n\n" + "/Resources/Images/";// _FilePath;
+			_NoImageText.text = "Place reference images in: \n\n" + _FilePath;
+		} else
+		{
+			//StartCoroutine(LoadButtons(files));
 		}
+
+		int i = 0;
 
 		foreach (Sprite tex in spriteList)
 		{
@@ -59,8 +69,42 @@ public class ImageButtonSpawner : MonoBehaviour {
 
 			ImageSpawner imgSpawner = img.GetComponent<ImageSpawner>();
 			imgSpawner._GlobalWrapper = _GlobalWrapper;
+
+			if (i < _ClickableAtStart)
+			{
+				img.gameObject.layer = LayerMask.NameToLayer ("Default");
+			}
+
+			i++;
 		}
-			
+
+		RectTransform R = _Parent.GetComponent<RectTransform> ();
+		R.sizeDelta = new Vector2(R.sizeDelta.x, (40f + 5f) * ((Mathf.CeilToInt((spriteList.Count) / 3) + 1)));
+
+		//Debug.Log (Mathf.CeilToInt((spriteList.Count + 1) / 3));
+	}
+
+	/*Load images in a coroutine*/
+	IEnumerator LoadButtons(List<string> files){
+		foreach (var file in files)
+		{
+			byte[] bytes;
+			yield return(bytes = System.IO.File.ReadAllBytes(file));
+			Texture2D image = new Texture2D (1, 1);
+			yield return(image.LoadImage (bytes));
+			Sprite sprite = new Sprite ();
+			yield return( sprite = Sprite.Create(image, new Rect(0,0,image.width, image.height), Vector2.zero) );
+
+			GameObject img = Instantiate (_ImagePrefab as Object, Vector3.zero, Quaternion.identity) as GameObject;
+			img.transform.SetParent (_Parent,false);
+			img.layer = LayerMask.NameToLayer ("Ignore Raycast");
+
+			Image spr = img.GetComponent<Image> ();
+			spr.sprite = sprite;
+
+			ImageSpawner imgSpawner = img.GetComponent<ImageSpawner>();
+			imgSpawner._GlobalWrapper = _GlobalWrapper;
+		}
 	}
 
 }
