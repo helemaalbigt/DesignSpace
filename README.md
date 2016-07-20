@@ -3,6 +3,8 @@
 DesignSpace is a prototype design tool for the HTC Vive for urban designers and architects, first developed during the 2016 AEC Hackathon in London.
 The tool demonstrates how you could load in and position reference images, work at scale, add simple block volumes, and sketch directly on the model.
 
+Note that the current version still has quite a few bugs in both the UI and model interaction.
+
 ## Usage
 
 This Repo contains the Unity3D project files. To open the project, launch Unity3D, select 'Open' and navigate to this project folder.
