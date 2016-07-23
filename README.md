@@ -19,3 +19,6 @@ Trigger buttons: click buttons, select objects, move/scale/rotate objects
 AEC hackathon team: Carlos de la Barrera, Lorenzo Greco, Thomas Phillips, Thomas Van Bouwel <br>
 3D Model London: Michal Konicek - Vertex Modelling <br>
 Sky box created by Hazel Whorley
+
+##License
+GNU General Public License v3.0
