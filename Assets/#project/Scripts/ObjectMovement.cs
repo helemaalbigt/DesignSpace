@@ -218,7 +218,7 @@ public class ObjectMovement : MonoBehaviour {
 
 		foreach (WandController cont in C)
 		{
-			if (cont.triggerPress)
+			if (cont.triggerPress && cont.rayHitModel)
 			{
 				if (InputController.activeTriggers > 1)
 				{

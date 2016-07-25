@@ -49,7 +49,6 @@ public class ModelButtonSpawner : MonoBehaviour {
 
 		foreach (string file in files)
 		{
-			Debug.Log ("yuup");
 			GameObject button = Instantiate (_ModelPrefab as Object, Vector3.zero, Quaternion.identity) as GameObject;
 			button.transform.SetParent (_Parent,false);
 

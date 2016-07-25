@@ -18,8 +18,9 @@ public class CursorController : MonoBehaviour {
 	public enum CursorState{
 		unlocked, 	
 		lockPos, 	//fixed in space
-		lockRad, 	//fixed fistance from controller
-		lockRadXZ 	//fixed distance from controller but same Z distance
+		lockRad, 	//fixed fistance from controller hold same rotation
+		lockRadXZ, 	//fixed distance from controller but same Z distance
+		lockRadNorm //fixed distance and follow controller rotation
 	};
 	public CursorState _CursorState = CursorState.unlocked;
 	private CursorState _PrevCursorState;
@@ -58,6 +59,17 @@ public class CursorController : MonoBehaviour {
 				_Line.material.color = Color.red;
 				_Line.material.SetColor("_EmissionColor", Color.red);
 			break;
+
+			case CursorState.lockRadNorm:
+				//position
+				_Cursor.transform.parent = _PointerAnchor;
+				_Cursor.transform.localPosition = new Vector3 (0f, 0f, _StateChangeDistance);
+				_Cursor.transform.up = _PointerAnchor.position - _Cursor.transform.position;
+				//appearance
+				_Cursor.materials [0].color = Color.red;
+				_Line.material.color = Color.red;
+				_Line.material.SetColor("_EmissionColor", Color.red);
+				break;
 
 			case CursorState.lockRadXZ:
 				//position

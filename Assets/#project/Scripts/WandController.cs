@@ -18,6 +18,8 @@ public class WandController : MonoBehaviour {
 
 	public bool inUse = false;
 
+	private bool isVibrating = false;
+
 	[Header("POINTER PARAMS")]
 	public float _RayRange;
 	public Transform _PointerAnchor;
@@ -53,6 +55,8 @@ public class WandController : MonoBehaviour {
 	public bool triggerDown = false;
 	public bool triggerUp = false;
 	public bool triggerPress = false;
+	private float _HoldTime = 2f;
+	public bool triggerHeld = false;//trigger held down for 1.5 seconds
 	public float triggerAxis;
 	[Space(15)]
 	public bool touchHoverDown = false;
@@ -99,12 +103,11 @@ public class WandController : MonoBehaviour {
 		triggerUp = _Controller.GetPressUp (_TriggerButton) ? true : false;
 		triggerPress = _Controller.GetPress (_TriggerButton) ? true : false;
 		triggerAxis = _Controller.GetAxis(_TriggerButton).x;
+		triggerHeld = (triggerPress && (Time.time - _LastClickTimeStamp >= _HoldTime)) ? true : false;
 
 		doubleClick = _Controller.GetPressDown (_TriggerButton) && Time.time - _LastClickTimeStamp <= _MaxDoubleClickTime ? true : false;
 		if (_Controller.GetPressDown (_TriggerButton))
-		{
 			_LastClickTimeStamp = Time.time;
-		}
 
 		touchHoverDown = _Controller.GetTouchDown (_TouchButton) ? true : false;
 		touchHoverUp = _Controller.GetTouchUp (_TouchButton) ? true : false;
@@ -161,5 +164,25 @@ public class WandController : MonoBehaviour {
 
 	public void Vibrate(ushort dur){
 		_Controller.TriggerHapticPulse (dur);
+	}
+
+	public void VibratePeriod(int rumbles, float duration){
+		if(!isVibrating)
+			StartCoroutine ( VibratePeriodCR(rumbles, duration));
+	}
+
+	IEnumerator VibratePeriodCR(int rumbles, float duration){
+		isVibrating = true;
+		float timePassed = 0;
+
+		while (timePassed < duration)
+		{
+			timePassed += ( duration / rumbles );
+
+			_Controller.TriggerHapticPulse(1000);
+			yield return new WaitForSeconds (duration / rumbles);
+		}
+
+		isVibrating = false;
 	}
 }
