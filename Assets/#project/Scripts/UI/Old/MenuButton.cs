@@ -29,6 +29,7 @@ public class MenuButton : MonoBehaviour {
 		
 	public void HoverOn(WandController C){
 
+
 		_LastHoverTimestamp = Time.time;
 		if (!_IsHoveredOn)
 		{

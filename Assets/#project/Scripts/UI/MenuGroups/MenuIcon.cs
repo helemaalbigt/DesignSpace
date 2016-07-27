@@ -39,6 +39,7 @@ public class MenuIcon : MonoBehaviour {
 		{
 			_Held = false;
 		}
+
 	}
 
 	IEnumerator MoveMenu(WandController C){

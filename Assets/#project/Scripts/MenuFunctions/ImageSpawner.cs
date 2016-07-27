@@ -42,7 +42,7 @@ public class ImageSpawner : MenuButton {
 
 		while (!C.triggerDown)
 		{
-			yield return null;
+            yield return null;
 		}
 
 		if (C.hitTag == "Pinboard" || C.hitTag == "Image")
