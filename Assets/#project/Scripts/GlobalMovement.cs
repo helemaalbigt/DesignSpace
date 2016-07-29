@@ -47,8 +47,6 @@ public class GlobalMovement : MonoBehaviour {
 		//if (InputController.inUse)
 			//return;
 
-		Debug.Log (InputController.inUse);
-
 		//skip a frame when changing states to avoid jumpy translations
 		if (C[0].gripDown || C[1].gripDown || C[1].gripUp || C[0].gripUp ||
 			C[0].triggerDown || C[1].triggerDown || C[1].triggerUp || C[0].triggerUp)

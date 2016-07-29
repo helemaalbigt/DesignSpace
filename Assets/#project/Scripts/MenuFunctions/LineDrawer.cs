@@ -25,7 +25,6 @@ public class LineDrawer : MenuCheckbox
 		{
 			InputController.inUse = true;
 
-			Debug.Log ("Start");
 			targetC = C;
 			C.cursor.SetDrawLock ();
 			foreach(WandController cont in InputController.controllers){
@@ -65,7 +64,6 @@ public class LineDrawer : MenuCheckbox
         }
         else
         {
-			Debug.Log ("reset");
             isClicked = false;
         }
     }
@@ -97,7 +95,6 @@ public class LineDrawer : MenuCheckbox
 	public void StopSketching(){
 		InputController.inUse = false;
 
-		Debug.Log ("Stop");
 		CancelInvoke();
 		targetC.cursor.SetCursorState (CursorController.CursorState.unlocked);
 		foreach(WandController cont in InputController.controllers){

@@ -31,8 +31,9 @@ public class WandController : MonoBehaviour {
 
 	private Ray _Ray;
 	private RaycastHit _Hit;
+    Ray newray;//remove
 
-	[Header("POINTER READOUT")]
+    [Header("POINTER READOUT")]
 	public bool rayHit;
 	public bool rayHitModel;
 	public string hitTag;
@@ -147,10 +148,26 @@ public class WandController : MonoBehaviour {
 			hitDistance = _Hit.distance;
 			rayHitModel = hitLayer == LayerMask.NameToLayer ("Model") ? true : false;
 
-			_Hit.transform.gameObject.SendMessage ("HoverOn", this, SendMessageOptions.RequireReceiver);
+            if(_Hit.transform.gameObject)
+			    _Hit.transform.gameObject.SendMessage ("HoverOn", this, SendMessageOptions.DontRequireReceiver);
 		} else {
 			rayHit = false;
 		}
+
+
+        //practice Raycast
+
+        RaycastHit hit;
+
+        newray.origin = _PointerAnchor.position;
+        newray.direction = _PointerAnchor.forward;
+
+        LayerMask hitMask = LayerMask.NameToLayer("WorkPlane");
+
+        if (Physics.Raycast(newray, out hit, hitMask))
+        {
+            Debug.Log("hit");
+        }
 			
 	}
 

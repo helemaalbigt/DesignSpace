@@ -40,7 +40,6 @@ public class Geometry : MonoBehaviour{
 		}
 	}
 
-
 	private ObjectBounds _ObjectBounds;
 
 	// Use this for initialization

@@ -9,7 +9,7 @@ public class CursorController : MonoBehaviour {
 	public MeshRenderer _Cursor;
 	public LineRenderer _Line;
 
-	public float _LineFactor;
+    public float _LineFactor;
 
 	private bool locked = false;
 	private float _StateChangeDistance = 0; //distance of cursor to controller on statechange - used for lockRad and lockRadXZ
