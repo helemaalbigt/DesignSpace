@@ -9,8 +9,9 @@ public class MenuCheckbox: MenuButton {
 	public UnityEvent _ClickOff;
 
 	public bool _IsSelected = false;
-	public Color _NeutralColor = new Color(255f,255f,255f,55f);
-	public Color _SelectedColor = new Color(50f,130f,255f,55f);
+    protected Color _NeutralColor = new Color32(0,0,0,155);
+	protected Color _SelectedColor = new Color32(0, 0, 0, 255);
+    public Color HexSelecter;
 
 	public void Start(){
 		base.Start ();
