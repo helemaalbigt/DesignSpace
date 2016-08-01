@@ -9,13 +9,16 @@ public class MenuCheckbox: MenuButton {
 	public UnityEvent _ClickOff;
 
 	public bool _IsSelected = false;
-    protected Color _NeutralColor = new Color32(0,0,0,155);
-	protected Color _SelectedColor = new Color32(0, 0, 0, 255);
-    public Color HexSelecter;
 
-	public void Start(){
+    public void Start(){
 		base.Start ();
-	}
+        if (_Background)
+            _Background.color = _IsSelected ? _SelectedColor : _NeutralColor;
+        if(_Icon)
+            _Icon.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+        if (_Name)
+            _Name.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+    }
 
 	public void HoverOn(WandController C){
 		base.HoverOn(C);
@@ -33,13 +36,23 @@ public class MenuCheckbox: MenuButton {
 		
 	public void Deselect(){
 		_IsSelected = false;
-		_Background.color = _NeutralColor;
-		_ClickOff.Invoke ();
+        if (_Background)
+            _Background.color = _NeutralColor;
+        if (_Icon)
+            _Icon.color = _IconNeutralColor;
+        if (_Name)
+            _Name.color = _IconNeutralColor;
+        _ClickOff.Invoke ();
 	}
 
 	public void Select(){
 		_IsSelected = true;
-		_Background.color = _SelectedColor;
-		_ClickOn.Invoke ();
+        if (_Background)
+            _Background.color = _SelectedColor;
+        if (_Icon)
+            _Icon.color = _IconSelectedColor;
+        if (_Name)
+            _Name.color = _IconSelectedColor;
+        _ClickOn.Invoke ();
 	}
 }

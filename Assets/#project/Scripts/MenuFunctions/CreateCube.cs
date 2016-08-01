@@ -10,7 +10,14 @@ public class CreateCube : MenuCheckbox
 	public Transform _GlobalWrapper;
 	private Vector3[] _Points = new Vector3[4];
 
-	public void HoverOn(WandController C){
+    public void Start()
+    {
+        base.Start();
+
+        _SelectedColor = new Color32(255, 70, 70, 115);
+    }
+
+    public void HoverOn(WandController C){
 		base.HoverOn(C);
 
 		if (_IsSelected && C.triggerDown)

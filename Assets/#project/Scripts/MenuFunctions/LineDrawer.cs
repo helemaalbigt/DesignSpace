@@ -18,7 +18,15 @@ public class LineDrawer : MenuCheckbox
 	private GameObject obj;
 	private WandController targetC;
 
-	public void HoverOn(WandController C){
+
+    public void Start()
+    {
+        base.Start();
+
+        _SelectedColor = new Color32(255, 70, 70, 115);
+    }
+
+    public void HoverOn(WandController C){
 		base.HoverOn(C);
 
 		if (_IsSelected && C.triggerDown)

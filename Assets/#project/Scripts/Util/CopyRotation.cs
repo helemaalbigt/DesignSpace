@@ -4,11 +4,19 @@ using System.Collections;
 public class CopyRotation : MonoBehaviour {
 
 	public Transform _Target;
-	public Quaternion _StartrotationDiff;
+    public Vector3 _StartRotation;
+    private Quaternion _StartrotationDiff;
 	public bool _MaintainRelativeRotation = false;
 
 	void Start(){
-		_StartrotationDiff = transform.rotation * _Target.rotation;
+        if (_StartRotation == null)
+        {
+            _StartrotationDiff = transform.rotation * _Target.rotation;
+        }
+        else
+        {
+            _StartrotationDiff = Quaternion.Euler(_StartRotation);
+        }
 	}
 
 	// Update is called once per frame

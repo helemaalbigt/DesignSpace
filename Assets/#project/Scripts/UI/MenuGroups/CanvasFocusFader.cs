@@ -18,10 +18,16 @@ public class CanvasFocusFader : MonoBehaviour {
 	void Update () {
 		float A = Vector3.Angle (_CanvasGroup.transform.forward, _Camera.forward);
 
+        if(A > _VisibilityAngle)
+        {
+            _CanvasGroup.transform.gameObject.SetActive(false);
+        }
+
 		float alpha = 0;
 		if (A <= _VisibilityAngle)
 		{
-			alpha = Mathf.InverseLerp (_VisibilityAngle, _VisibilityAngle - _TransitionAngle, A);
+            _CanvasGroup.transform.gameObject.SetActive(true);
+            alpha = Mathf.InverseLerp (_VisibilityAngle, _VisibilityAngle - _TransitionAngle, A);
 		}
 
 		_CanvasGroup.alpha = alpha;
