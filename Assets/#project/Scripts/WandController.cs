@@ -31,7 +31,6 @@ public class WandController : MonoBehaviour {
 
 	private Ray _Ray;
 	private RaycastHit _Hit;
-    Ray newray;//remove
 
     [Header("POINTER READOUT")]
 	public bool rayHit;
@@ -86,7 +85,6 @@ public class WandController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (_Controller == null) {
-			Debug.Log ("Controller not initialized");
 			return;
 		}
 			
@@ -152,23 +150,8 @@ public class WandController : MonoBehaviour {
 			    _Hit.transform.gameObject.SendMessage ("HoverOn", this, SendMessageOptions.DontRequireReceiver);
 		} else {
 			rayHit = false;
-		}
-
-
-        //practice Raycast
-
-        RaycastHit hit;
-
-        newray.origin = _PointerAnchor.position;
-        newray.direction = _PointerAnchor.forward;
-
-        LayerMask hitMask = LayerMask.NameToLayer("WorkPlane");
-
-        if (Physics.Raycast(newray, out hit, hitMask))
-        {
-            Debug.Log("hit");
-        }
-			
+            hitLayer = 0;
+		}			
 	}
 
 	private void OnTriggerEnter(Collider collider){

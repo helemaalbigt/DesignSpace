@@ -104,7 +104,8 @@ public class LineDrawer : MenuCheckbox
 		InputController.inUse = false;
 
 		CancelInvoke();
-		targetC.cursor.SetCursorState (CursorController.CursorState.unlocked);
+        if(targetC != null)
+		    targetC.cursor.SetCursorState (CursorController.CursorState.unlocked);
 		foreach(WandController cont in InputController.controllers){
 			cont.cursor.SetCursorState (CursorController.CursorState.unlocked);
 		}

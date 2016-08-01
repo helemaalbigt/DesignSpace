@@ -20,7 +20,8 @@ public class CanvasFocusFader : MonoBehaviour {
 
         if(A > _VisibilityAngle)
         {
-            _CanvasGroup.transform.gameObject.SetActive(false);
+            if(!InputController.inUse)
+                _CanvasGroup.transform.gameObject.SetActive(false);
         }
 
 		float alpha = 0;

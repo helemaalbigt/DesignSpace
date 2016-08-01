@@ -17,17 +17,12 @@ public class MenuImageSpawner : MonoBehaviour {
     }
 
     // Update is called once per frame
-    public void SpawnImage()
+    public void HoverOn(WandController C)
     {
-        if (!InputController.inUse)
-        {
-            if (FindMenuControllerReference(transform) != null)
+        if (C.triggerDown) { 
+            if (!InputController.inUse)
             {
-                StartCoroutine(SpawnImageCR(FindMenuControllerReference(transform)));
-            }
-            else
-            {
-                Debug.Log("Either the parents or the parent's parent needs to have a collider and the 'MenuControllerReference' script attached");
+                StartCoroutine(SpawnImageCR(C));
             }
         }
     }
@@ -62,15 +57,8 @@ public class MenuImageSpawner : MonoBehaviour {
             yield return null;
         }
 
-        if (C.hitTag == "Pinboard" || C.hitTag == "Image")
-        {
-            imageSpawn.transform.parent = FindParent(C.hitObj.transform);
-        }
-        else
-        {
-            imageSpawn.transform.parent = _GlobalWrapper;
-        }
-
+        imageSpawn.transform.parent = (C.hitLayer == LayerMask.NameToLayer("Model") || C.hitLayer == LayerMask.NameToLayer("WorkPlane")) ? _GlobalWrapper : null;
+        Debug.Log(C.hitTag);
         BoxCollider BC = imageSpawn.AddComponent<BoxCollider>();
         BC.size = new Vector3(BC.size.x, BC.size.y, 0.1f);
 
@@ -78,41 +66,5 @@ public class MenuImageSpawner : MonoBehaviour {
 
         C.cursor.SetCursorState(CursorController.CursorState.unlocked);
         InputController.inUse = false;
-    }
-
-    private Transform FindParent(Transform hit)
-    {
-        if (hit.tag == "Pinboard")
-        {
-            _NoInfinity = 0;
-            return hit;
-        }
-        else
-        {
-            _NoInfinity++;
-            if (_NoInfinity > 10)
-            {
-                _NoInfinity = 0;
-                return hit;
-            }
-
-            return FindParent(hit.parent);
-        }
-    }
-
-    private WandController FindMenuControllerReference(Transform trans)
-    {
-        if (trans.parent.GetComponent<MenuControllerReference>())
-        {
-            return trans.parent.GetComponent<MenuControllerReference>().controller;
-        }
-        else if (trans.parent.parent.GetComponent<MenuControllerReference>())
-        {
-            return trans.parent.parent.GetComponent<MenuControllerReference>().controller;
-        }
-        else
-        {
-            return null;
-        }
     }
 }
