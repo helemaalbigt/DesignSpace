@@ -25,11 +25,15 @@ public class MenuButton : MonoBehaviour {
     public void Start () {
         if (transform.Find("ButtonHighlight"))
             _Highlight = transform.Find("ButtonHighlight").GetComponent<Image>();
+
         if(transform.Find("Icon"))
             _Icon = transform.Find("Icon").GetComponent<Image>();
+
         if (transform.Find("Name"))
             _Name = transform.Find("Name").GetComponent<Text>();
+
         _Background = GetComponent<Image>();
+
 		if(_Highlight != null)
 			_Highlight.enabled = _IsHoveredOn;
 	}
@@ -48,7 +52,8 @@ public class MenuButton : MonoBehaviour {
 			StartCoroutine (HoverOffCount ());
 		}
 
-		_Highlight.enabled = true;
+        if(_Highlight != null)
+		    _Highlight.enabled = true;
 
 		if (C.triggerDown)
 		{

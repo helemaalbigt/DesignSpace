@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: bab5aed1948f48746aa11f0650349437
-timeCreated: 1468059118
+timeCreated: 1470175383
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: icons_0
     21300002: icons_1
     21300004: icons_2
+    21300006: icons_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -52,8 +53,10 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: icons_0
+    - serializedVersion: 2
+      name: icons_0
       rect:
         serializedVersion: 2
         x: 0
@@ -61,52 +64,11 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 61, y: 39}
-        - {x: -51, y: -11}
-        - {x: -64, y: -30}
-        - {x: -93, y: 47}
-        - {x: -94, y: 48}
-        - {x: -117, y: 48}
-        - {x: -124, y: 41}
-        - {x: -124, y: -117}
-        - {x: 91, y: -117}
-        - {x: 124, y: -39}
-        - {x: 124, y: -17}
-        - {x: 120, y: -8}
-      - - {x: -90, y: 115}
-        - {x: -90, y: -54}
-        - {x: -89, y: -66}
-        - {x: -88, y: -68}
-        - {x: -50, y: -68}
-        - {x: 51, y: -11}
-        - {x: 51, y: 86}
-        - {x: 27, y: 115}
-      - - {x: -70, y: -5}
-        - {x: -71, y: -9}
-        - {x: -71, y: -17}
-        - {x: -67, y: -19}
-        - {x: -59, y: -19}
-        - {x: -51, y: -9}
-        - {x: -51, y: -5}
-      - - {x: -69, y: 30}
-        - {x: -71, y: 28}
-        - {x: -71, y: 20}
-        - {x: -69, y: 14}
-        - {x: 30, y: 14}
-        - {x: 33, y: 19}
-        - {x: 33, y: 28}
-        - {x: 32, y: 30}
-      - - {x: -71, y: 54}
-        - {x: -69, y: 49}
-        - {x: 33, y: 49}
-        - {x: 33, y: 60}
-        - {x: 32, y: 64}
-        - {x: -66, y: 64}
-        - {x: -71, y: 60}
-    - name: icons_1
+      outline: []
+    - serializedVersion: 2
+      name: icons_1
       rect:
         serializedVersion: 2
         x: 256
@@ -114,34 +76,11 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -98, y: -48}
-        - {x: -104, y: -77}
-        - {x: -104, y: -104}
-        - {x: -89, y: -104}
-        - {x: -49, y: -98}
-        - {x: -48, y: -95}
-        - {x: -48, y: -92}
-        - {x: -93, y: -48}
-      - - {x: 26, y: 80}
-        - {x: -91, y: -43}
-        - {x: -91, y: -46}
-        - {x: -45, y: -92}
-        - {x: -44, y: -92}
-        - {x: 81, y: 30}
-        - {x: 81, y: 46}
-        - {x: 46, y: 80}
-      - - {x: 45, y: 102}
-        - {x: 38, y: 89}
-        - {x: 38, y: 81}
-        - {x: 81, y: 37}
-        - {x: 85, y: 37}
-        - {x: 103, y: 49}
-        - {x: 103, y: 82}
-        - {x: 75, y: 102}
-    - name: icons_2
+      outline: []
+    - serializedVersion: 2
+      name: icons_2
       rect:
         serializedVersion: 2
         x: 0
@@ -149,23 +88,21 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 99, y: 58}
-        - {x: 2, y: 102}
-        - {x: -4, y: 102}
-        - {x: -15, y: 98}
-        - {x: -102, y: 57}
-        - {x: -105, y: 54}
-        - {x: -105, y: -61}
-        - {x: -104, y: -64}
-        - {x: -19, y: -104}
-        - {x: -4, y: -108}
-        - {x: 5, y: -108}
-        - {x: 87, y: -69}
-        - {x: 100, y: -63}
-        - {x: 100, y: 55}
+      outline: []
+    - serializedVersion: 2
+      name: icons_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 
