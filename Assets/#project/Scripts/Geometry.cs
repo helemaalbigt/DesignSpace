@@ -16,7 +16,7 @@ public class Geometry : MonoBehaviour{
 				_ObjectBounds.EnableBounds(transform, _ObjectBounds._ColorSelected);
 			} else
 			{
-				_ObjectBounds.DisableBounds(transform);
+			    _ObjectBounds.DisableBounds(transform);
 			}
 		}
 	}
@@ -26,11 +26,13 @@ public class Geometry : MonoBehaviour{
 		get{ return isHoveredOn; }
 		set{ 
 			isHoveredOn = value;
+
 			if (!IsActive)
 			{
 				if (isHoveredOn)
 				{
-					StartCoroutine (HoverOffCount ());
+                    StopAllCoroutines();
+                    StartCoroutine (HoverOffCount ());
 					_ObjectBounds.EnableBounds (transform, _ObjectBounds._ColorHover);
 				} else
 				{
@@ -46,18 +48,10 @@ public class Geometry : MonoBehaviour{
 	void Start () {
 		_ObjectBounds = GameObject.FindGameObjectWithTag("GameController").GetComponent<ObjectBounds>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	public void HoverOn(){
 		_LastHoverTimestamp = Time.time;
-		if (!IsHoveredOn)
-		{
-			IsHoveredOn = true;
-		}
+        IsHoveredOn = true;
 	}
 
 	IEnumerator HoverOffCount(){

@@ -13,8 +13,14 @@ public class ObjectBounds : MonoBehaviour {
 
 
 	public void DisableBounds(Transform parent){
-		GameObject bounds = parent.Find("BoundingBox").gameObject;
-		bounds.SetActive (false);
+        if (parent.Find("BoundingBox") != null)
+        {
+            GameObject bounds = parent.Find("BoundingBox").gameObject;
+            bounds.SetActive(false);
+        }else
+        {
+            Debug.LogWarning("Object '" + transform.gameObject.name + "'has no renderer - could not draw bounding box");
+        }
 
 		_LastSelected = null;
 	}
@@ -29,8 +35,14 @@ public class ObjectBounds : MonoBehaviour {
 				line.material.SetColor("_Color",col);
 			}
 		} else {
-			DrawBounds (parent.GetComponent<Renderer> (), col);
-			//DrawBounds (parent.GetComponent<MeshFilter>().mesh, col, parent);
+            if (parent.GetComponent<Renderer>() != null)
+            {
+                DrawBounds(parent.GetComponent<Renderer>(), col);
+            }
+            else
+            {
+                Debug.LogWarning("Object '"+transform.gameObject.name+"'has no renderer - could not draw bounding box");
+            }
 		}
 
 		_LastSelected = parent;
@@ -38,25 +50,24 @@ public class ObjectBounds : MonoBehaviour {
 
 	private void DrawBounds(Renderer rend, Color col){
 
-		//create parent object
-		_BoundingBox = new GameObject("BoundingBox");
+        //generate combined bounds
+        Bounds combinedBounds = rend.bounds;
+        Renderer[] renderers = rend.transform.gameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer R in renderers)
+        {
+            if (R != rend) combinedBounds.Encapsulate(R.bounds);
+        }
+
+        //create parent object
+        _BoundingBox = new GameObject("BoundingBox");
 		_BoundingBox.transform.parent = rend.transform;
 
 		_BoundingBox.transform.localPosition = Vector3.zero;
 		_BoundingBox.transform.localRotation = Quaternion.identity;
 		_BoundingBox.transform.localScale = Vector3.one;
 
-		//generate combined bounds
-		Bounds combinedBounds = rend.bounds;
-		Renderer[] renderers = rend.transform.gameObject.GetComponentsInChildren<Renderer>();
-		foreach (Renderer R in renderers) {
-			if (R != rend) combinedBounds.Encapsulate(R.bounds);
-		}
-
 		Vector3 v3Center = combinedBounds.center;
 		Vector3 v3Extents = combinedBounds.extents;
-		//Vector3 v3Center = rend.transform.InverseTransformPoint(combinedBounds.center);
-		//Vector3 v3Extents = rend.transform.InverseTransformDirection(combinedBounds.extents);
 
 		Vector3 v3FrontTopLeft     = new Vector3(v3Center.x - v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z);  // Front top left corner
 		Vector3 v3FrontTopRight    = new Vector3(v3Center.x + v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z);  // Front top right corner
