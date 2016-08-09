@@ -31,7 +31,8 @@ public class SelectionController : MonoBehaviour {
 
 		foreach (WandController C in cont)
 		{
-			if (!C.triggerPress || !C.triggerDown || C.hitObj == null)
+            //only handle input if just pressed and is hitting something
+			if (!C.triggerDown || C.hitObj == null)
 				return;
 
 			if (!C.rayHit && InputController.activeTouchPress == 0 && C.triggerDown)

@@ -7,9 +7,11 @@ public class ObjectBounds : MonoBehaviour {
 	public Color _ColorSelected;
 	public Material _BoundMaterial;
 	public float _BoundWidth;
+    public float _ImageBoundWidth;
 
-	private Transform _LastSelected;
+    private Transform _LastSelected;
 	private GameObject _BoundingBox = null;
+    private string _ImageTag = "Image";
 
 
 	public void DisableBounds(Transform parent){
@@ -26,6 +28,7 @@ public class ObjectBounds : MonoBehaviour {
 	}
 
 	public void EnableBounds(Transform parent, Color col){
+
 		if (hasChildWithName(parent, "BoundingBox")) {
 			GameObject bounds = parent.Find("BoundingBox").gameObject;
 			bounds.SetActive (true);
@@ -37,7 +40,14 @@ public class ObjectBounds : MonoBehaviour {
 		} else {
             if (parent.GetComponent<Renderer>() != null)
             {
-                DrawBounds(parent.GetComponent<Renderer>(), col);
+                if(parent.gameObject.tag == _ImageTag)
+                {
+                    DrawBoundsImage(parent.GetComponent<Renderer>(), col);
+                }
+                else
+                {
+                    DrawBounds(parent.GetComponent<Renderer>(), col);
+                }
             }
             else
             {
@@ -143,12 +153,42 @@ public class ObjectBounds : MonoBehaviour {
 		drawLine (v3BackBottomRight , v3BackTopRight, col, _BoundWidth, _BoundingBox);
 	}
 
+    private void DrawBoundsImage(Renderer rend, Color col){
 
-	private void drawLine(Vector3 p1, Vector3 p2, Color col, float lineWidth, GameObject parent){
+        //create parent object
+        _BoundingBox = new GameObject("BoundingBox");
+        _BoundingBox.transform.parent = rend.transform;
+
+        _BoundingBox.transform.localPosition = Vector3.zero;
+        _BoundingBox.transform.localRotation = Quaternion.identity;
+        _BoundingBox.transform.localScale = Vector3.one;
+
+        //get bounds
+        SpriteRenderer spriteRend = rend as SpriteRenderer;
+        Vector2 v2Extents = new Vector2(spriteRend.sprite.rect.width, spriteRend.sprite.rect.height);
+        v2Extents /= 100f; //convert pixels to units
+
+        //draw bounds
+        Vector3 v3TopLeft = new Vector3(0, v2Extents.y, 0);  // Front top left corner
+        Vector3 v3TopRight = new Vector3(v2Extents.x, v2Extents.y, 0);  // Front top right corner
+        Vector3 v3BottomLeft = new Vector3(v2Extents.x, 0, 0);  // Back top left corner
+        Vector3 v3BottomRight = new Vector3(0,0,0);
+
+        drawLine(v3TopLeft, v3TopRight, col, _ImageBoundWidth, _BoundingBox, false);
+        drawLine(v3TopLeft, v3BottomRight, col, _ImageBoundWidth, _BoundingBox, false);
+        drawLine(v3BottomRight, v3BottomLeft, col, _ImageBoundWidth, _BoundingBox, false);
+        drawLine(v3BottomLeft, v3TopRight, col, _ImageBoundWidth, _BoundingBox, false);
+    }
+
+
+    private void drawLine(Vector3 p1, Vector3 p2, Color col, float lineWidth, GameObject parent, bool useWorldSpace = true){
 
 		GameObject line = new GameObject("Line");
 		line.transform.parent = parent.transform;
-		line.AddComponent<LineRenderer>();
+        line.transform.localPosition = Vector3.zero;
+        line.transform.localRotation = Quaternion.identity;
+        line.transform.localScale = Vector3.one;
+        line.AddComponent<LineRenderer>();
 		LineRenderer lineRenderer = line.GetComponent<LineRenderer> ();
 		//lineRenderer.useWorldSpace = true;
 		lineRenderer.useWorldSpace = false;
@@ -158,8 +198,16 @@ public class ObjectBounds : MonoBehaviour {
 		lineRenderer.SetWidth(lineWidth, lineWidth);
 		lineRenderer.SetVertexCount(2);
 
-		lineRenderer.SetPosition(0, line.transform.InverseTransformPoint(p1));
-		lineRenderer.SetPosition(1, line.transform.InverseTransformPoint(p2));
+        if (useWorldSpace)
+        {
+            lineRenderer.SetPosition(0, line.transform.InverseTransformPoint(p1));
+            lineRenderer.SetPosition(1, line.transform.InverseTransformPoint(p2));
+        }
+        else
+        {
+            lineRenderer.SetPosition(0, p1);
+            lineRenderer.SetPosition(1, p2);
+        }
 	}
 
 	private bool hasChildWithName(Transform parent, string name){

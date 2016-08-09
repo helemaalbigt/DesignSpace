@@ -5,6 +5,7 @@ using System.Collections;
 
 public class MenuImageSpawner : MonoBehaviour {
 
+    public Material _SpriteMaterial;
     private Transform _GlobalWrapper;
     private Sprite _Image;
 
@@ -44,6 +45,7 @@ public class MenuImageSpawner : MonoBehaviour {
 
         SpriteRenderer SR = imageSpawn.AddComponent<SpriteRenderer>();
         SR.sprite = _Image;
+        SR.material = _SpriteMaterial;
 
         imageSpawn.layer = LayerMask.NameToLayer("Model");
         imageSpawn.tag = "Image";

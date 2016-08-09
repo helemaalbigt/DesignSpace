@@ -6,6 +6,7 @@ public class ImageSpawner : MenuButton {
 
 
 	public Transform _GlobalWrapper;
+    public Material _SpriteMaterial;
 	private Sprite _Image;
 
 	private int _NoInfinity = 0;
