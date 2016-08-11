@@ -7,7 +7,7 @@ public class LoadScenes : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (InputController.controllers [0].menuDown)
+		if (InputController.controllers[0].menuDown)
 		{
 			Application.LoadLevel("Main");
 		}

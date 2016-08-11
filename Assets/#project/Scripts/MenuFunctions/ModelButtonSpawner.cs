@@ -29,45 +29,43 @@ public class ModelButtonSpawner : MonoBehaviour {
 			System.IO.Directory.CreateDirectory (_FilePath);
 
 		//get all images from directory
-		List<string> files = new List<string> ();
 		var info = new DirectoryInfo(_FilePath);
 		var fileInfo = info.GetFiles();
 
+        bool filesFound = false;
+
 		foreach(var file in fileInfo){
-			if (file.Extension == ".obj")
-			{
-				files.Add(file.Name);
-			}
+            switch (file.Extension)
+            {
+                case ".obj":
+                    filesFound = true;
+                    CreateModelButton(file.Name, ModelSpawner.FileType.obj);
+                    break;
+
+                case ".fbx":
+                    filesFound = true;
+                    CreateModelButton(file.Name, ModelSpawner.FileType.fbx);
+                    break;
+            }
 		}
 
-		if (files.Count == 0)
-		{
+		if (!filesFound)
+        {
 			_NoModelText.text = "Place .obj files in: \n\n" + _FilePath;
 		} 
-
-		int i = 0;
-
-		foreach (string file in files)
-		{
-			GameObject button = Instantiate (_ModelPrefab as Object, Vector3.zero, Quaternion.identity) as GameObject;
-			button.transform.SetParent (_Parent,false);
-
-			Text fileName = button.GetComponentInChildren<Text> ();
-			fileName.text = file;
-
-			ModelSpawner spawner = button.GetComponent<ModelSpawner>();
-			spawner._GlobalWrapper = _GlobalWrapper;
-			spawner._ModelFilePath = _FilePath + file;
-
-			if (i < _ClickableAtStart)
-			{
-				button.gameObject.layer = LayerMask.NameToLayer ("Default");
-			}
-
-			i++;
-		}
-
-		RectTransform R = _Parent.GetComponent<RectTransform> ();
-		R.sizeDelta = new Vector2(R.sizeDelta.x, (40f + 5f) * ((Mathf.CeilToInt((files.Count) / 3) + 1)));
 	}
+
+    private void CreateModelButton(string path, ModelSpawner.FileType type)
+    {
+        GameObject button = Instantiate(_ModelPrefab as Object, Vector3.zero, Quaternion.identity) as GameObject;
+        button.transform.SetParent(_Parent, false);
+
+        Text fileName = button.GetComponentInChildren<Text>();
+        fileName.text = path;
+
+        ModelSpawner spawner = button.GetComponent<ModelSpawner>();
+        spawner._GlobalWrapper = _GlobalWrapper;
+        spawner._ModelFilePath = _FilePath + path;
+        spawner._FileType = type;
+    }
 }

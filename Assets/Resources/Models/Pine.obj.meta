@@ -10,23 +10,33 @@ ModelImporter:
     100004: Mesh3_Group5_Group4_Group1_Model
     100006: Mesh4_Group6_Group4_Group1_Model
     100008: //RootNode
+    100010: Mesh3_Group4_Group1_Model
+    100012: Mesh4_Group5_Group1_Model
     400000: Mesh1_Group2_Group1_Model
     400002: Mesh2_Group3_Group1_Model
     400004: Mesh3_Group5_Group4_Group1_Model
     400006: Mesh4_Group6_Group4_Group1_Model
     400008: //RootNode
+    400010: Mesh3_Group4_Group1_Model
+    400012: Mesh4_Group5_Group1_Model
     2300000: Mesh1_Group2_Group1_Model
     2300002: Mesh2_Group3_Group1_Model
     2300004: Mesh3_Group5_Group4_Group1_Model
     2300006: Mesh4_Group6_Group4_Group1_Model
+    2300008: Mesh3_Group4_Group1_Model
+    2300010: Mesh4_Group5_Group1_Model
     3300000: Mesh1_Group2_Group1_Model
     3300002: Mesh2_Group3_Group1_Model
     3300004: Mesh3_Group5_Group4_Group1_Model
     3300006: Mesh4_Group6_Group4_Group1_Model
+    3300008: Mesh3_Group4_Group1_Model
+    3300010: Mesh4_Group5_Group1_Model
     4300000: Mesh1_Group2_Group1_Model
     4300002: Mesh2_Group3_Group1_Model
     4300004: Mesh3_Group5_Group4_Group1_Model
     4300006: Mesh4_Group6_Group4_Group1_Model
+    4300008: Mesh3_Group4_Group1_Model
+    4300010: Mesh4_Group5_Group1_Model
   materials:
     importMaterials: 1
     materialName: 0

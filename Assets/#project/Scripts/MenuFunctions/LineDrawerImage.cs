@@ -25,7 +25,6 @@ public class LineDrawerImage : MenuCheckbox
 			C.cursor.SetCursorState(CursorController.CursorState.unlocked);
 			InputController.inUse = true;
 
-			Debug.Log ("Start");
 			targetC = C;
 			InvokeRepeating("CreateLines",0f,0.015f);
 		}
@@ -60,16 +59,12 @@ public class LineDrawerImage : MenuCheckbox
         }
         else
         {
-			Debug.Log ("reset");
             isClicked = false;
         }
     }
 		
 	private void AddPoint(Vector3 pos, LineRenderer lr)
     {
-		if (!(targetC.hitObj.tag == "Image"))
-			//return;
-
 		if (positions.Count > 0)
 		{
 			if(Vector3.Distance(positions[positions.Count-1], pos) < minLineDist){
@@ -84,7 +79,6 @@ public class LineDrawerImage : MenuCheckbox
 	public void StopSketching(){
 		InputController.inUse = false;
 
-		Debug.Log ("Stop");
 		CancelInvoke();
 		isClicked = false;
 	}

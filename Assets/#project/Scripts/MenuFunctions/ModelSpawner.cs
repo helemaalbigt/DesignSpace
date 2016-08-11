@@ -7,6 +7,13 @@ public class ModelSpawner : MenuButton {
 
 	public Transform _GlobalWrapper;
 	public string _ModelFilePath = "G:/01 My Documents/2016/Work/VR_DesignSpace/02 Files/DesignSpace/Assets/Resources/Models/treeobj.obj";
+    public enum FileType
+    {
+        obj,
+        fbx,
+        max
+    };
+    public FileType _FileType;
 
 	private int _NoInfinity = 0;
 
@@ -28,7 +35,13 @@ public class ModelSpawner : MenuButton {
 
         //create and position parent gameobject
 		GameObject modelSpawn = new GameObject ();
-		yield return (modelSpawn = OBJLoader2.LoadOBJFile(_ModelFilePath));
+        switch (_FileType)
+        {
+            case FileType.obj:
+                yield return (modelSpawn = LoadModel_OBJImport());
+                break;
+        }
+		
 		modelSpawn.transform.parent = C.cursor.transform;
 		modelSpawn.transform.up = C.hitNorm;
 
@@ -61,6 +74,12 @@ public class ModelSpawner : MenuButton {
         yield return null;
 		InputController.inUse = false;
 	}
+
+    //Load .obj with the OBJImport plugin
+    private GameObject LoadModel_OBJImport()
+    {
+        return OBJLoader2.LoadOBJFile(_ModelFilePath);
+    }
 
     private void GetColliders(GameObject parentNode, GameObject node)
     {
