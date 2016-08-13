@@ -1,0 +1,49 @@
+﻿
+############### Before July 2015 ###############
+//Go replace UpdateAnchors() by this.
+// It will allow to deactivate the position and rotation of the head and allow script to take this part in charge.
+// Bad code but, I did not found a better way to do it.
+
+Old unity integration Version ...
+
+public bool delegatePositionning;
+	public delegate void UpdatePositionning(OVRPose leftPose, OVRPose rightPose, Transform left, Transform center, Transform right, bool alreadyPositioned);
+	public UpdatePositionning onPositionningUpdate;
+
+	private void UpdateAnchors()
+	{
+
+		bool monoscopic = OVRManager.instance.monoscopic;
+		if (!delegatePositionning)
+		{
+
+			OVRPose tracker = OVRManager.tracker.GetPose();
+			OVRPose hmdLeftEye = OVRManager.display.GetEyePose(OVREye.Left);
+			OVRPose hmdRightEye = OVRManager.display.GetEyePose(OVREye.Right);
+
+			trackerAnchor.localRotation = tracker.orientation;
+			centerEyeAnchor.localRotation = hmdLeftEye.orientation; // using left eye for now
+			leftEyeAnchor.localRotation = monoscopic ? centerEyeAnchor.localRotation : hmdLeftEye.orientation;
+			rightEyeAnchor.localRotation = monoscopic ? centerEyeAnchor.localRotation : hmdRightEye.orientation;
+
+			trackerAnchor.localPosition = tracker.position;
+			centerEyeAnchor.localPosition = 0.5f * (hmdLeftEye.position + hmdRightEye.position);
+			leftEyeAnchor.localPosition = monoscopic ? centerEyeAnchor.localPosition : hmdLeftEye.position;
+			rightEyeAnchor.localPosition = monoscopic ? centerEyeAnchor.localPosition : hmdRightEye.position;
+
+			if (UpdatedAnchors != null)
+			{
+				UpdatedAnchors(this);
+			}
+		}
+		if (leftEyeAnchor != null && centerEyeAnchor != null && rightEyeAnchor != null && OVRManager.display != null)
+		{
+			if (onPositionningUpdate != null)
+			{
+				OVRPose leftEye = OVRManager.display.GetEyePose(OVREye.Left);
+				OVRPose rightEye = OVRManager.display.GetEyePose(OVREye.Right);
+				onPositionningUpdate(leftEye, rightEye, leftEyeAnchor, centerEyeAnchor, rightEyeAnchor, !delegatePositionning);
+			}
+		}
+	}
+
