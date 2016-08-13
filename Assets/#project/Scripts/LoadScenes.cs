@@ -14,7 +14,7 @@ public class LoadScenes : MonoBehaviour {
 
 		if (InputController.controllers[1].menuDown)
 		{
-			Application.LoadLevel("Model");
+			Application.LoadLevel("Main");
 		}
 	}
 }

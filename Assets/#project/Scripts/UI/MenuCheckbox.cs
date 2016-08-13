@@ -9,6 +9,7 @@ public class MenuCheckbox: MenuButton {
 	public UnityEvent _ClickOff;
 
 	public bool _IsSelected = false;
+    public Color _SelectedColor;
 
     public void Start(){
 		base.Start ();
