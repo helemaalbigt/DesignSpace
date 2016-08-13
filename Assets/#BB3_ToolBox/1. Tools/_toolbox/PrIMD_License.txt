@@ -1,0 +1,18 @@
+All codes and assets in this folder belong to:
+- Strée Eloi (PrIMD)
+- www.primd.be/
+- (+32) 0488/757.684
+- streeeloi@gmail.com
+- primd42@gmail.com
+
+They have been designer during its free time.
+All stuffs are under "beerware license":
+> http://www.primd.be/beerware/
+> https://en.wikipedia.org/wiki/Beerware/
+
+
+
+
+This folder contains lots of script that I regulary use for my projects.
+Warning, they are not perfect or totaly tested.
+But most are usefull.

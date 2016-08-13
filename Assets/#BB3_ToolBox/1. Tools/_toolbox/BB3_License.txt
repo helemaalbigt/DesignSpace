@@ -1,0 +1,16 @@
+All of the codes and assets in this folder has been code by:
+- Strée Eloi (PrIMD)
+- www.stree.be/eloi/license
+- (+32) 0488/757.684
+- streeeloi@gmail.com
+- primd42@gmail.com
+
+\\\\\ > Warning <////// 
+This folder contains lots of script that I regulary use for my projects.
+Warning, they are not perfect or totaly tested.
+But most are usefull.
+
+Please contact me if you use my script in your projects.
+Just to have a feed back on who is using it.
+
+
