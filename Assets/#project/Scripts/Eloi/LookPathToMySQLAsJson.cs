@@ -13,16 +13,27 @@ public class LookPathToMySQLAsJson : MonoBehaviour {
     public string _postLookPathUrl="http://jams.center/UnityAccess/DesignSpace/???.php";
 
 
-    public string RemoveAllNonAlphaByUnderScore(string value) {
-        Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-        return rgx.Replace(value, "_");
-
-    }
+ 
 
     public void PostLookPathData(LookPath lookPath) {
         Loading loading = new Loading();
         StartCoroutine(PostLookPath(loading,lookPath));
     }
+
+    public void LoadJsonFile(OnJsonDetected onJsonLoaded, Loading isAllSonLoaded)
+    {
+
+        string[] sessions = null;
+        StartCoroutine(LoadSessionCoroutine(isAllSonLoaded, sessions, onJsonLoaded));
+    }
+
+
+    public void DeleteAllFromDB()
+    {
+        Loading load = new Loading();
+        StartCoroutine(DeleteAllFromDBCorputine(load));
+    }
+
 
     public IEnumerator PostLookPath(Loading loading, LookPath lookPath)
     {
@@ -42,7 +53,9 @@ public class LookPathToMySQLAsJson : MonoBehaviour {
 
 
     }
-    public IEnumerator DeleteAllFromDB(Loading loading)
+
+   
+    public IEnumerator DeleteAllFromDBCorputine(Loading loading)
     {
         loading.SetLoadingState(true);
 
@@ -62,12 +75,7 @@ public class LookPathToMySQLAsJson : MonoBehaviour {
 
 
     public delegate void OnJsonDetected(string sessionName, string json);
-    public void LoadJsonFile(OnJsonDetected onJsonLoaded, Loading isAllSonLoaded) {
-       
-        string[] sessions = null;
-        StartCoroutine(LoadSessionCoroutine(isAllSonLoaded, sessions,onJsonLoaded));
-    }
-  
+    
     public IEnumerator LoadSessionCoroutine(Loading loading, string[] sessions, OnJsonDetected onJsonDetected)
     {
         loading.SetLoadingState(true);
@@ -125,5 +133,12 @@ public class LookPathToMySQLAsJson : MonoBehaviour {
         }
         //Debug.Break();
         //info.AutoDestruction();
+    }
+
+    public string RemoveAllNonAlphaByUnderScore(string value)
+    {
+        Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+        return rgx.Replace(value, "_");
+
     }
 }

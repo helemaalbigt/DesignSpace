@@ -12,13 +12,27 @@ public class LoadJsonFromDbToHardDrive : MonoBehaviour {
 
     public UnityEvent _onFinishDownloadingJson;
 
+    public bool _autoLoadAtStart=true;
+    public bool _autoFlushOnLoad = true;
     public void Start()
     {
+        if (_autoLoadAtStart)
+            LoadAllJson();
+
+    }
+
+    public void LoadAllJson() {
 
         Loading isAllJsonLoaded = new Loading();
         isAllJsonLoaded.SetLoadingState(true);
         isAllJsonLoaded.onLoadingChangeState += SayHelloWhenAllJsonAreLoaded;
+
+
         _webServerAcces.LoadJsonFile(DisplayJSON, isAllJsonLoaded);
+    }
+
+    public void FlushFolderBeforeDownload() {
+            ProjectPathTools.RemoveAllIn(_jsonFolderPath);
     }
 
     private void SayHelloWhenAllJsonAreLoaded(Loading loading, bool isLoading)
@@ -32,7 +46,11 @@ public class LoadJsonFromDbToHardDrive : MonoBehaviour {
 
     private void DisplayJSON(string sessionName, string json)
     {
-        print(">>>> " + sessionName);
+
+        if (_autoFlushOnLoad)
+            FlushFolderBeforeDownload();
+
+            print(">>>> " + sessionName);
         print("> " + json);
         ProjectFilePath filePath = ProjectFilePath.CreateFrom(_jsonFolderPath);
         filePath.SetFileName(sessionName);
