@@ -17,9 +17,10 @@ public class LookAtPointRecorder : MonoBehaviour {
     [SerializeField]
     private float _timeSinceStartRecording;
 
-    public LookPath _lookPathAffected = new LookPath();
+    public LookPath _lookPathAffected;
     public Transform _trackedTransform;
     public LookPathToJSON _lookPathConverter;
+    public LookPathToMySQLAsJson _lookPathToDB;
 
     void Start() {
         InvokeRepeating("RecordFrame", 0, _frameRecordInterval);
@@ -28,7 +29,6 @@ public class LookAtPointRecorder : MonoBehaviour {
     void RecordFrame() {
         if (_trackedTransform == null) return;
         if (!_recording) return;
-   
         Vector3 rootPoint = _rootReference.InverseTransformPoint(_trackedTransform.position);
 
         RaycastHit hit;
@@ -56,6 +56,7 @@ public class LookAtPointRecorder : MonoBehaviour {
 
     void StartRecord() {
         _recording = true;
+        _lookPathAffected = new LookPath(SystemInfo.deviceUniqueIdentifier);
         _lookPathAffected.Reset();
 
     }
@@ -64,5 +65,6 @@ public class LookAtPointRecorder : MonoBehaviour {
     {
         _recording = false;
         _lookPathConverter.RecordPath(_lookPathAffected);
+        _lookPathToDB.PostLookPathData(_lookPathAffected);
     }
 }

@@ -79,7 +79,7 @@ namespace Undefine {
                     file.SetFileName(_linkedUrl[i]._name);
                     file.SetFileType("URL");
 
-                    file.CreateFile(string.Format("[InternetShortcut]\n URL={0}\n  IDList =\n HotKey=0\n  IconIndex = 0\n", _linkedUrl[i]._url),true);
+                    ProjectPathTools.SaveFileAt(string.Format("[InternetShortcut]\n URL={0}\n  IDList =\n HotKey=0\n  IconIndex = 0\n", _linkedUrl[i]._url),file,true);
                     
                 }
             }

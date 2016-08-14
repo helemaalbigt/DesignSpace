@@ -33,7 +33,7 @@ public class ProjectMinimumStructure : MonoBehaviour {
                 if (fileContent != null && ! string.IsNullOrEmpty(fileContent.text))
                 {
                     Debug.LogWarning("Your file (" + resPath + ") is created: " + _files[i].GetPath(true)) ;
-                    _files[i].CreateFile(fileContent.text);
+                   ProjectPathTools.SaveFileAt( fileContent.text, _files[i], true);
                 }
                 else Debug.LogWarning("Your file (" + resPath + ") do not exist in your resources folders");
 
