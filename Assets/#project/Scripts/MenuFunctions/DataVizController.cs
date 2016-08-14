@@ -11,14 +11,25 @@ public class DataVizController : MonoBehaviour {
     public GameObject _GazeVolumePrefab;
     public GameObject _AvatarPrefab;
 
+    private int[] arrContent;
+    public int[] arrCountNumbers
+    {
+        get { return arrContent; }
+    }
+
     private List<JSONbutton> JsonButtons = new List<JSONbutton>();
     private bool _IsRendering = false;
     private bool _FinishedRendering = false;
     private bool _Paused = false;
     private bool _FastRendering = false;
 
-	// Use this for initialization
-	void Start () {
+    private Vector3 ptTest;
+    private float hSize = 1f;
+    private int count = 0;
+    private List<Vector3> lstPtsCube = new List<Vector3>();
+
+    // Use this for initialization
+    void Start () {
       //  Invoke("RefreshJsonButtons", 0.5f);
 	}
 
@@ -102,9 +113,21 @@ public class DataVizController : MonoBehaviour {
 
         int statesRendered = 0;
 
+        //list of spawned cubes
+        List<Vector3> lstPtsCube = new List<Vector3>();
+        ptTest = path._lookStatePath[0]._lookState._rootPosition;
+        count = 0;
+
+        //list of spawned sphere
+      /*  List<Vector3> lstPtsCube = new List<Vector3>();
+        ptTest = path._lookStatePath[0]._lookState._rootPosition;
+        count = 0;*/
+
         //loop through all points and execute render functions
-        foreach (TimeLinkedLookState state in path._lookStatePath)
+        for (int i = 0; i < path._lookStatePath.Count; i++)
         {
+            TimeLinkedLookState state = path._lookStatePath[i];
+
             while (_Paused)
             {
                 yield return null;
@@ -133,6 +156,22 @@ public class DataVizController : MonoBehaviour {
             statesRendered++;
         }
 
+        arrContent = new int[lstPtsCube.Count];
+        int c = 0;
+        foreach (Vector3 vec in lstPtsCube)
+        {
+            count = 0;
+            foreach (TimeLinkedLookState state in path._lookStatePath)
+            {
+                Vector3 p = state._lookState._rootPosition;
+                if (TestInside(p, vec, hSize))
+                    count++;
+            }
+            arrContent[c] = count;
+            c++;
+        }
+
+
         yield return null;
 
         _IsRendering = false;
@@ -141,10 +180,16 @@ public class DataVizController : MonoBehaviour {
 
     private void SpawnPlayerPos(Vector3 pos)
     {
-        GameObject cube = Instantiate(_PositionVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
-        cube.transform.parent = _DataWrapper;
-        cube.transform.localPosition = pos;
-        cube.transform.localScale = Vector3.one;
+        if(!TestInside(pos, ptTest, hSize))
+        { 
+            lstPtsCube.Add(ptTest);
+            ptTest = pos;
+
+            GameObject cube = Instantiate(_PositionVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            cube.transform.parent = _DataWrapper;
+            cube.transform.localPosition = pos;
+            cube.transform.localScale = Vector3.one;
+        }
         //cube.GetComponentInChildren<Renderer>().material.color = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
     }
 
@@ -179,5 +224,20 @@ public class DataVizController : MonoBehaviour {
             avatar.transform.localPosition = Vector3.Slerp(startPos, newPos, timePassed / duration);
             yield return null;
         } 
+    }
+
+    private bool TestInside(Vector3 p, Vector3 ptCube, float hSize)
+    {
+        Vector3 ptStart = new Vector3(ptCube.x - hSize, ptCube.y - hSize, ptCube.z - hSize);
+        Vector3 ptEnd = new Vector3(ptCube.x + hSize, ptCube.y + hSize, ptCube.z + hSize);
+
+        if ((p.x > ptStart.x & p.x < ptEnd.x) & (p.z > ptStart.z & p.z < ptEnd.z) & (p.y > ptStart.y & p.y < ptEnd.y))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
