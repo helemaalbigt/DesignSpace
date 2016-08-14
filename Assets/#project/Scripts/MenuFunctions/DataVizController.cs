@@ -19,10 +19,10 @@ public class DataVizController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Invoke("RefreshJsonButtons", 0.5f);
+      //  Invoke("RefreshJsonButtons", 0.5f);
 	}
 
-    private void RefreshJsonButtons()
+    public void RefreshJsonButtons()
     {
         foreach (Transform child in _JsonButtonsParent)
         {

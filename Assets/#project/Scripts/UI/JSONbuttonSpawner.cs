@@ -39,22 +39,25 @@ public class JSONbuttonSpawner : MonoBehaviour {
             jsb.ButtonName = "user "+i;
         }
 
-        /*
-        foreach (var file in fileInfo)
-        {
-            if (file.Extension == ".json")
-            {
-                GameObject button = Instantiate(_ButtonPrefab as UnityEngine.Object, Vector3.zero, Quaternion.identity) as GameObject;
-                button.transform.parent = _Parent;
-                button.transform.localScale = Vector3.one;
+    }
 
-                JSONbutton jsb = button.GetComponent<JSONbutton>();
-                jsb.JsonFileLocation = file.FullName;
-                string min = file.CreationTime.Minute > 10 ? file.CreationTime.Minute + "" : "0" + file.CreationTime.Minute;
-                jsb.ButtonName = file.CreationTime.Day + "/" + file.CreationTime.Month + "/" + file.CreationTime.Year + " | " + file.CreationTime.Hour + ":" + min;
-            }
+    public void SpawnButtons()
+    {
+        int i = 0;
+
+        foreach (LookPath path in _lookPathToJSON.RecoverAllPaths())
+        {
+            GameObject button = Instantiate(_ButtonPrefab as UnityEngine.Object, Vector3.zero, Quaternion.identity) as GameObject;
+            button.transform.parent = _Parent;
+            button.transform.localPosition = Vector3.zero;
+            button.transform.localRotation = Quaternion.identity;
+            button.transform.localScale = Vector3.one;
+
+            JSONbutton jsb = button.GetComponent<JSONbutton>();
+            jsb._LookPath = path;
+            i++;
+            jsb.ButtonName = "user " + i;
         }
-        */
     }
 
 }

@@ -28,6 +28,9 @@ public class LoadJsonFromDbToHardDrive : MonoBehaviour {
         isAllJsonLoaded.onLoadingChangeState += SayHelloWhenAllJsonAreLoaded;
 
 
+        if (_autoFlushOnLoad)
+            FlushFolderBeforeDownload();
+
         _webServerAcces.LoadJsonFile(DisplayJSON, isAllJsonLoaded);
     }
 
@@ -46,9 +49,6 @@ public class LoadJsonFromDbToHardDrive : MonoBehaviour {
 
     private void DisplayJSON(string sessionName, string json)
     {
-
-        if (_autoFlushOnLoad)
-            FlushFolderBeforeDownload();
 
             print(">>>> " + sessionName);
         print("> " + json);
