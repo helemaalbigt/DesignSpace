@@ -18,6 +18,13 @@ public class Cube
 		}
 	}
 
+	private int[] arrContent;
+
+	public int[] arrCountNumbers
+	{
+		get{return arrContent;}
+	}
+
 	private Color[] arrColors;
 	public Color[] ColorMap
 	{
@@ -60,8 +67,9 @@ public class Cube
 			lstPtsCube.Add (ptTest);
 			i = count;
 		}
-
-		List<int> hitCount = new List<int> ();
+			
+		arrContent = new int[lstPtsCube.Count];
+		int c = 0;
 		foreach (Vector3 vec in lstPtsCube) {
 		
 			count = 0;
@@ -69,59 +77,11 @@ public class Cube
 				if (TestInside (p, vec))
 					count++;
 			}
-			hitCount.Add (count);
-		}
-			
+			arrContent [c] = count;
+			c++;
+		}			
 	}
 		
-	private void Materials(){
-	
-		//Renderer rend = new Renderer ();
-		//rend.material = Material (Shader.SetGlobalColor ("Shader", new Color (1.0f, 0.0f, 0)));
-
-	}
-
-	private void RangeColor (List<int> lstInteger)
-	{
-		Color clr;
-		arrColors = new Color[lstInteger.Count];
-
-		List<int> nList = new List<int> (lstInteger);
-		nList.AddRange (lstInteger);
-		nList.Sort ();
-		int from1 = 0;
-		int to1 = nList [nList.Count - 1];
-		int from2 = 1;
-		int to2 = 5;
-
-		int r;
-		int c = 0;
-
-		foreach (int i in lstInteger) {
-			
-			r = (i - from1) / (to1 - from1) * (to2 - from2) + from2;
-			switch (r) {
-			case 1:
-				clr = new Color (1.0f, 0.0f, 0); //red
-				break;
-			case 2:
-				clr = new Color (0.075f, 0.25f, 0);
-				break;
-			case 3:
-				clr = new Color (0.5f, 0.5f, 0); //orange
-				break;
-			case 4:
-				clr = new Color (0.25f, 0.75f, 0);
-				break;
-			default:
-				clr = new Color (0, 1, 0); //green
-				break;
-			}
-				
-			arrColors [c] = clr;
-			c++;
-		}
-
 	}
 		
 	private void halfsize()
