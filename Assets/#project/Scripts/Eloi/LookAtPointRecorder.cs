@@ -7,6 +7,9 @@ public class LookAtPointRecorder : MonoBehaviour {
 
     [SerializeField]
     private float _frameRecordInterval;
+    [SerializeField]
+    private Transform _rootReference;
+    private LayerMask _layerAllowToCollideWithLook;
 
     [Header("Debug Viewer")]
     [SerializeField]
@@ -17,15 +20,24 @@ public class LookAtPointRecorder : MonoBehaviour {
     public LookPath _lookPathAffected = new LookPath();
     public Transform _trackedTransform;
     public LookPathToJSON _lookPathConverter;
-    void Start() {
 
+    void Start() {
         InvokeRepeating("RecordFrame", 0, _frameRecordInterval);
     }
 
     void RecordFrame() {
         if (_trackedTransform == null) return;
         if (!_recording) return;
-        _lookPathAffected.AddLookState(_timeSinceStartRecording, _trackedTransform.position, _trackedTransform.position + transform.forward);
+   
+        Vector3 rootPoint = _rootReference.InverseTransformPoint(_trackedTransform.position);
+
+        RaycastHit hit;
+        Vector3 lookAtPoint = Vector3.zero;
+        if (Physics.Raycast(_trackedTransform.position, _trackedTransform.forward, out hit))
+            lookAtPoint = hit.point;
+        lookAtPoint = _rootReference.InverseTransformPoint(lookAtPoint);
+
+        _lookPathAffected.AddLookState(_timeSinceStartRecording, rootPoint, lookAtPoint);
 
     }
 

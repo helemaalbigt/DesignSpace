@@ -5,6 +5,7 @@ using System.Collections;
 public class JSONbutton : MonoBehaviour {
 
     public string JsonFileLocation = null;
+    public LookPath _LookPath;
 
     public Text buttonNameText;
 

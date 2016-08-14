@@ -9,7 +9,6 @@ public class LookPath  {
     [JsonProperty(PropertyName = "Path")]
     public List<TimeLinkedLookState> _lookStatePath = new List<TimeLinkedLookState>();
 
-
     public void AddLookState(float when, Vector3 fromWhere, Vector3 toWhere) {
         AddLookState(
             new TimeLinkedLookState() {
@@ -57,8 +56,4 @@ public struct LookState {
     //    set { Debug.Log(value); }
     //}
     //FOR THOMAS FROM ELOI EXEMPLE OF PROPERTY USING JSON
-
-
-
-
 }
