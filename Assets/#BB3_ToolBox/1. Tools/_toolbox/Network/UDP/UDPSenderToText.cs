@@ -17,6 +17,7 @@ public class UDPSenderToText : MonoBehaviour {
     }
 
     public void Update(){
+        if (tDisplayValue == null) return;
         tDisplayValue.text ="Out: "+ toDisplay;
     
     }

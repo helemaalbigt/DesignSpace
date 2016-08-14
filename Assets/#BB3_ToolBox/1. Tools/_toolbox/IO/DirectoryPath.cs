@@ -346,17 +346,7 @@ namespace BlackBox.Tools.IO
                 Directory.CreateDirectory(path);
         }
 
-        internal void CreateFile(string text, bool overrideFile = false)
-        {
-
-            string path = GetPath(true);
-            string folder = GetDirectoryParts(true, true, true);
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
-            //if the file do not existe or that we allow to override
-            if (!File.Exists(path) || (File.Exists(path) && overrideFile) )
-                System.IO.File.WriteAllText(path, text);
-            }
+        
     }
 
 
@@ -590,7 +580,7 @@ namespace BlackBox.Tools.IO
     public class ProjectPathTools
     {
 
-        public static string SaveFileAt(string textData, ProjectFilePath filePath)
+        public static string SaveFileAt(string textData, ProjectFilePath filePath, bool withOverride=true)
         {
 
 
@@ -604,6 +594,7 @@ namespace BlackBox.Tools.IO
             if (!Directory.Exists(folderDirPath))
                 Directory.CreateDirectory(folderDirPath);
             string fPath = filePath.GetPath(true);
+            if( ! File.Exists(fPath) || (File.Exists(fPath) && withOverride))
             File.WriteAllText(fPath, textData);
             return fPath;
         }

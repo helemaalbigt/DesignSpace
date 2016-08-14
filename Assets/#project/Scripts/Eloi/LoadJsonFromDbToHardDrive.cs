@@ -1,0 +1,62 @@
+using UnityEngine;
+using System.Collections;
+using BlackBox.Beans.Basic;
+
+using BlackBox.Tools.IO;
+using UnityEngine.Events;
+
+public class LoadJsonFromDbToHardDrive : MonoBehaviour {
+
+    public LookPathToMySQLAsJson _webServerAcces;
+    public ProjectDirectoryPath _jsonFolderPath;
+
+    public UnityEvent _onFinishDownloadingJson;
+
+    public bool _autoLoadAtStart=true;
+    public bool _autoFlushOnLoad = true;
+    public void Start()
+    {
+        if (_autoLoadAtStart)
+            LoadAllJson();
+
+    }
+
+    public void LoadAllJson() {
+
+        Loading isAllJsonLoaded = new Loading();
+        isAllJsonLoaded.SetLoadingState(true);
+        isAllJsonLoaded.onLoadingChangeState += SayHelloWhenAllJsonAreLoaded;
+
+
+        _webServerAcces.LoadJsonFile(DisplayJSON, isAllJsonLoaded);
+    }
+
+    public void FlushFolderBeforeDownload() {
+            ProjectPathTools.RemoveAllIn(_jsonFolderPath);
+    }
+
+    private void SayHelloWhenAllJsonAreLoaded(Loading loading, bool isLoading)
+    {
+        if (!isLoading)
+        {
+            print("Hello json");
+            _onFinishDownloadingJson.Invoke();
+        }
+    }
+
+    private void DisplayJSON(string sessionName, string json)
+    {
+
+        if (_autoFlushOnLoad)
+            FlushFolderBeforeDownload();
+
+            print(">>>> " + sessionName);
+        print("> " + json);
+        ProjectFilePath filePath = ProjectFilePath.CreateFrom(_jsonFolderPath);
+        filePath.SetFileName(sessionName);
+        filePath.SetFileType("json");
+
+        print("<<< " + filePath.GetPath(false));
+        ProjectPathTools.SaveFileAt(json, filePath);
+    }
+}

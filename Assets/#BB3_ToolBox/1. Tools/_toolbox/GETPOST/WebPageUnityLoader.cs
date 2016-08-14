@@ -6,48 +6,7 @@ using System;
 namespace BlackBox.Tools
 {
 
-    public class WebAccessor
-    {
-        public static WebPageUnityLoader LoadPage(string url, bool autoStart = true) {
-            return LoadPage(url, null, null, null,autoStart);
-        }
-        public static WebPageUnityLoader LoadPage(string url, List<ParamsProperty> properties, bool autoStart = true)
-        {
-            return LoadPage(url, properties, null, null,autoStart);
-        }
-        public static WebPageUnityLoader LoadPage(string url, List<ParamsProperty> properties, string user, string password, bool autoStart=true)
-        {
-            GameObject pageLoader = new GameObject("> Page Loader: "+url);
-            WebPageUnityLoader unityPageLoad = pageLoader.AddComponent<WebPageUnityLoader>();
-
-            unityPageLoad.SetLink(url);
-            if(properties!=null && properties.Count>0)
-                unityPageLoad.AddParams(properties);
-            if(! string.IsNullOrEmpty(user) || password!=null)
-                unityPageLoad.SetUser(user, password);
-
-            if (autoStart)
-                unityPageLoad.LoadWithCoroutine();
-            return unityPageLoad;
-        }
-
-        [System.Serializable]
-        public class ParamsProperty
-        {
-            public string key = "key";
-            public string value = "value";
-            public enum SendType { GET, POST }
-            public SendType type = SendType.POST;
-            public ParamsProperty(string key, string value, SendType sendType)
-            {
-                this.key = key;
-                this.value = value;
-                this.type = sendType;
-            }
-        }
-
-    }
-
+    
     public class WebPageUnityLoader : MonoBehaviour
     {
 
@@ -321,4 +280,47 @@ namespace BlackBox.Tools
             _password = password;
         }
     }
+    public class WebAccessor
+    {
+        public static WebPageUnityLoader LoadPage(string url, bool autoStart = true)
+        {
+            return LoadPage(url, null, null, null, autoStart);
+        }
+        public static WebPageUnityLoader LoadPage(string url, List<ParamsProperty> properties, bool autoStart = true)
+        {
+            return LoadPage(url, properties, null, null, autoStart);
+        }
+        public static WebPageUnityLoader LoadPage(string url, List<ParamsProperty> properties, string user, string password, bool autoStart = true)
+        {
+            GameObject pageLoader = new GameObject("> Page Loader: " + url);
+            WebPageUnityLoader unityPageLoad = pageLoader.AddComponent<WebPageUnityLoader>();
+
+            unityPageLoad.SetLink(url);
+            if (properties != null && properties.Count > 0)
+                unityPageLoad.AddParams(properties);
+            if (!string.IsNullOrEmpty(user) || password != null)
+                unityPageLoad.SetUser(user, password);
+
+            if (autoStart)
+                unityPageLoad.LoadWithCoroutine();
+            return unityPageLoad;
+        }
+
+        [System.Serializable]
+        public class ParamsProperty
+        {
+            public string key = "key";
+            public string value = "value";
+            public enum SendType { GET, POST }
+            public SendType type = SendType.POST;
+            public ParamsProperty(string key, string value, SendType sendType)
+            {
+                this.key = key;
+                this.value = value;
+                this.type = sendType;
+            }
+        }
+
+    }
+
 }
