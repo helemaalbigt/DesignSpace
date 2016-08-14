@@ -6,6 +6,7 @@ public class DataVizController : MonoBehaviour {
 
     public Transform _JsonButtonsParent;
     public Transform _DataWrapper;
+    public Transform _GlobalWrapper;
 
     public GameObject _PositionVolumePrefab;
     public GameObject _GazeVolumePrefab;
@@ -23,10 +24,8 @@ public class DataVizController : MonoBehaviour {
     private bool _Paused = false;
     private bool _FastRendering = false;
 
-    private Vector3 ptTest;
     private float hSize = 1f;
-    private int count = 0;
-    private List<Vector3> lstPtsCube = new List<Vector3>();
+   
 
     // Use this for initialization
     void Start () {
@@ -97,6 +96,14 @@ public class DataVizController : MonoBehaviour {
 
     IEnumerator RenderPath(LookPath path)
     {
+        Vector3 ptTest;
+        int count = 0;
+        List<Vector3> lstPtsCube = new List<Vector3>();
+
+        Vector3 ptTestSphere;
+        int countSphere = 0;
+        List<Vector3> lstPtsSphere = new List<Vector3>();
+
         //make sure there are points in this path
         if (path._lookStatePath.Count == 0)
             yield break;
@@ -114,14 +121,12 @@ public class DataVizController : MonoBehaviour {
         int statesRendered = 0;
 
         //list of spawned cubes
-        List<Vector3> lstPtsCube = new List<Vector3>();
         ptTest = path._lookStatePath[0]._lookState._rootPosition;
         count = 0;
 
         //list of spawned sphere
-      /*  List<Vector3> lstPtsCube = new List<Vector3>();
-        ptTest = path._lookStatePath[0]._lookState._rootPosition;
-        count = 0;*/
+        ptTestSphere = path._lookStatePath[0]._lookState._lookAtPosition;
+        countSphere = 0;
 
         //loop through all points and execute render functions
         for (int i = 0; i < path._lookStatePath.Count; i++)
@@ -134,9 +139,9 @@ public class DataVizController : MonoBehaviour {
             }
 
             //instantiate cube each player position
-            SpawnPlayerPos(state._lookState._rootPosition);
+            SpawnPlayerPos(state._lookState._rootPosition, ptTest, lstPtsCube);
             //instantiate sphere at each gaze position
-            SpawnPlayerGaze(state._lookState._lookAtPosition);
+            SpawnPlayerGaze(state._lookState._lookAtPosition, ptTestSphere, lstPtsSphere);
             //update Avatar
             StartCoroutine( UpdateAvatar(avatar, state._lookState._rootPosition, state._lookState._lookAtPosition, timeSinceLastPoint) );
 
@@ -156,6 +161,7 @@ public class DataVizController : MonoBehaviour {
             statesRendered++;
         }
 
+        /*
         arrContent = new int[lstPtsCube.Count];
         int c = 0;
         foreach (Vector3 vec in lstPtsCube)
@@ -169,7 +175,7 @@ public class DataVizController : MonoBehaviour {
             }
             arrContent[c] = count;
             c++;
-        }
+        }*/
 
 
         yield return null;
@@ -178,14 +184,14 @@ public class DataVizController : MonoBehaviour {
         _FastRendering = false;
     }
 
-    private void SpawnPlayerPos(Vector3 pos)
+    private void SpawnPlayerPos(Vector3 pos, Vector3 ptTest, List<Vector3> lstPtsCube)
     {
         if(!TestInside(pos, ptTest, hSize))
         { 
             lstPtsCube.Add(ptTest);
             ptTest = pos;
 
-            GameObject cube = Instantiate(_PositionVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            GameObject cube = Instantiate(_PositionVolumePrefab, Vector3.zero, _DataWrapper.rotation) as GameObject;
             cube.transform.parent = _DataWrapper;
             cube.transform.localPosition = pos;
             cube.transform.localScale = Vector3.one;
@@ -193,12 +199,18 @@ public class DataVizController : MonoBehaviour {
         //cube.GetComponentInChildren<Renderer>().material.color = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
     }
 
-    private void SpawnPlayerGaze(Vector3 pos)
+    private void SpawnPlayerGaze(Vector3 pos, Vector3 ptTestSphere, List<Vector3> lstPtsSphere)
     {
-        GameObject sphere = Instantiate(_GazeVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
-        sphere.transform.parent = _DataWrapper;
-        sphere.transform.localPosition = pos;
-        sphere.transform.localScale = Vector3.one;
+        if (!TestInside(pos, ptTestSphere, hSize))
+        {
+            lstPtsSphere.Add(ptTestSphere);
+            ptTestSphere = pos;
+
+            GameObject sphere = Instantiate(_GazeVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            sphere.transform.parent = _DataWrapper;
+            sphere.transform.localPosition = pos;
+            sphere.transform.localScale = Vector3.one;
+        }
     }
 
     private GameObject SpawnAvatar(Vector3 startPos)
@@ -217,11 +229,18 @@ public class DataVizController : MonoBehaviour {
         Vector3 startPos = avatar.transform.localPosition;
         Quaternion startRot = avatar.transform.localRotation;
 
+        Quaternion newRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(newLookAtPos - newPos, Vector3.up));
+        LineRenderer lr = avatar.GetComponent<LineRenderer>();
+        lr.SetPosition(0, avatar.transform.position);
+        lr.SetPosition(1, _DataWrapper.TransformPoint(newLookAtPos));
+        lr.SetWidth(_GlobalWrapper.localScale.x*0.04f, _GlobalWrapper.localScale.x * 0.04f);
+
         while(timePassed < duration)
         {
             timePassed += Time.deltaTime;
 
             avatar.transform.localPosition = Vector3.Slerp(startPos, newPos, timePassed / duration);
+            avatar.transform.localRotation = Quaternion.Slerp(startRot, newRot, timePassed / duration);
             yield return null;
         } 
     }

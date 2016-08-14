@@ -17,7 +17,13 @@ public class LoadJsonFromDbToHardDrive : MonoBehaviour {
     public void Start()
     {
         if (_autoLoadAtStart)
+        {
             LoadAllJson();
+        }
+        else
+        {
+            _onFinishDownloadingJson.Invoke();
+        }
 
     }
 
