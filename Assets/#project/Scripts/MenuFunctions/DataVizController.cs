@@ -139,9 +139,31 @@ public class DataVizController : MonoBehaviour {
             }
 
             //instantiate cube each player position
-            SpawnPlayerPos(state._lookState._rootPosition, ptTest, lstPtsCube);
+            Vector3 pos = state._lookState._rootPosition;
+            if (!TestInside(pos, ptTest, hSize))
+            {
+                lstPtsCube.Add(ptTest);
+                ptTest = pos;
+
+                GameObject cube = Instantiate(_PositionVolumePrefab, Vector3.zero, _DataWrapper.rotation) as GameObject;
+                cube.transform.parent = _DataWrapper;
+                cube.transform.localPosition = pos;
+                cube.transform.localScale = Vector3.one;
+            }
+
             //instantiate sphere at each gaze position
-            SpawnPlayerGaze(state._lookState._lookAtPosition, ptTestSphere, lstPtsSphere);
+            pos = state._lookState._lookAtPosition;
+            if (!TestInside(pos, ptTestSphere, hSize))
+            {
+                lstPtsSphere.Add(ptTestSphere);
+                ptTestSphere = pos;
+
+                GameObject sphere = Instantiate(_GazeVolumePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+                sphere.transform.parent = _DataWrapper;
+                sphere.transform.localPosition = pos;
+                sphere.transform.localScale = Vector3.one;
+            }
+
             //update Avatar
             StartCoroutine( UpdateAvatar(avatar, state._lookState._rootPosition, state._lookState._lookAtPosition, timeSinceLastPoint) );
 

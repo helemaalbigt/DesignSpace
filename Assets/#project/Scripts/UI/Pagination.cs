@@ -34,8 +34,15 @@ public class Pagination : MonoBehaviour {
     //    Invoke("UpdateNodes", 0.1f);
 	}
 
-    private void UpdateNodes()
+    void OnEnable()
     {
+        UpdateNodes();
+    }
+
+    public void UpdateNodes()
+    {
+        _Nodes.Clear();
+
         foreach(Transform child in _NodeWrapper)
         {
             _Nodes.Add(child);
