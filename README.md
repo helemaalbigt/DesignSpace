@@ -22,4 +22,4 @@ OBJ import script: AARO4130 <br>
 Sky box created by Hazel Whorley
 
 ##License
-GNU General Public License v3.0
+MIT License
