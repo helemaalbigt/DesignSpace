@@ -87,9 +87,9 @@ public class SunController : MonoBehaviour {
 			P.x = LocalHitPos.x;
 			P.y = LocalHitPos.z;
 
-			float num = Mathf.Pow (rad, 2);
+			float nom = Mathf.Pow (rad, 2);
 			float denom = 1f + Mathf.Pow ((P.x / P.y), 2);
-			S.x = Mathf.Sqrt (num/denom);
+			S.x = Mathf.Sqrt (nom/denom);
 			S.y = (P.x / P.y) * S.x;
 
 			Mathf.Clamp (S.x, -rad, rad);

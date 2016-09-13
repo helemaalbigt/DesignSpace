@@ -10,14 +10,12 @@ public class MenuCheckbox: MenuButton {
 
 	public bool _IsSelected = false;
 
+    public new Color _SelectedColor;
+    public new Color _TextNeutralColor;
+
     public void Start(){
 		base.Start ();
-        if (_Background)
-            _Background.color = _IsSelected ? _SelectedColor : _NeutralColor;
-        if(_Icon)
-            _Icon.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
-        if (_Name)
-            _Name.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+        SetColor();
     }
 
 	public void HoverOn(WandController C){
@@ -36,23 +34,25 @@ public class MenuCheckbox: MenuButton {
 		
 	public void Deselect(){
 		_IsSelected = false;
-        if (_Background)
-            _Background.color = _NeutralColor;
-        if (_Icon)
-            _Icon.color = _IconNeutralColor;
-        if (_Name)
-            _Name.color = _IconNeutralColor;
+        SetColor();
         _ClickOff.Invoke ();
 	}
 
 	public void Select(){
 		_IsSelected = true;
-        if (_Background)
-            _Background.color = _SelectedColor;
-        if (_Icon)
-            _Icon.color = _IconSelectedColor;
-        if (_Name)
-            _Name.color = _IconSelectedColor;
+        SetColor();
         _ClickOn.Invoke ();
 	}
+
+    private void SetColor()
+    {
+        if (_Background)
+            _Background.color = _IsSelected ? _SelectedColor : _NeutralColor;
+        if (_Icon)
+            _Icon.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+        if (_Name)
+            _Name.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+        if (_Text)
+            _Text.color = _IsSelected ? _TextSelectedColor : _TextNeutralColor;
+    }
 }

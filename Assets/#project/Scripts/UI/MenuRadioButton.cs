@@ -9,22 +9,31 @@ public class MenuRadioButton: MenuCheckbox {
 	protected List<MenuRadioButton> _Buttons =  new List<MenuRadioButton>() ;
 	public bool _AlwaysOneSelected = false;
 
-	public void Start(){
+    public void Start(){
 		base.Start ();
 
-		if(_IsSelected)
+        RefreshButtonsList();
+
+        if (_IsSelected)
 			Select ();
 	}
 
 	public void Awake(){
-		foreach (Transform button in transform.parent)
-		{
-			if (button.GetComponent<MenuRadioButton> () != null)
-			{
-				_Buttons.Add(button.GetComponent<MenuRadioButton> ());
-			}
-		}
-	}
+        RefreshButtonsList();
+    }
+
+    private void RefreshButtonsList()
+    {
+        _Buttons.Clear();
+
+        foreach (Transform button in transform.parent)
+        {
+            if (button.GetComponent<MenuRadioButton>() != null)
+            {
+                _Buttons.Add(button.GetComponent<MenuRadioButton>());
+            }
+        }
+    }
 
 	public void HoverOn(WandController C){
 		
@@ -50,7 +59,8 @@ public class MenuRadioButton: MenuCheckbox {
 			StartCoroutine (HoverOffCount ());
 		}
 
-		_Highlight.enabled = true;
+        if(_Highlight != null)
+		    _Highlight.enabled = true;
 
 		if (C.triggerDown)
 		{

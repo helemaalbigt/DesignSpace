@@ -2,15 +2,19 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class MenuButton : MonoBehaviour {
 	
 	public UnityEvent _Click;
 
-	protected Image _Highlight;
+    public event Action OnClick;
+
+    protected Image _Highlight;
 	protected Image _Background;
-    protected Image _Icon;
-    protected Text _Name;
+    protected Image _Icon; 
+    protected Text _Name; 
+    protected Text _Text; //value or subtitle within the button
 
     protected float _HoverOffTime = 0.05f;
 	protected float _LastHoverTimestamp;
@@ -20,6 +24,8 @@ public class MenuButton : MonoBehaviour {
     protected Color _SelectedColor = new Color32(70, 155, 255, 155);
     protected Color _IconNeutralColor = new Color32(0, 0, 0, 255);
     protected Color _IconSelectedColor = new Color32(0, 0, 0, 255);
+    protected Color _TextNeutralColor = new Color32( 0, 0, 0, 255);
+    protected Color _TextSelectedColor = new Color32(0, 0, 0, 255);
 
     // Use this for initialization
     public void Start () {
@@ -31,6 +37,9 @@ public class MenuButton : MonoBehaviour {
 
         if (transform.Find("Name"))
             _Name = transform.Find("Name").GetComponent<Text>();
+
+        if (transform.Find("Text"))
+            _Text = transform.Find("Text").GetComponent<Text>();
 
         _Background = GetComponent<Image>();
 
@@ -58,7 +67,10 @@ public class MenuButton : MonoBehaviour {
 		if (C.triggerDown)
 		{
 			_Click.Invoke ();
-		}
+
+            if (OnClick != null)
+                OnClick();
+        }
 	}
 
 
