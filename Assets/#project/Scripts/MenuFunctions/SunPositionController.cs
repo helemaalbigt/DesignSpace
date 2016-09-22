@@ -120,6 +120,9 @@ public class SunPositionController : MonoBehaviour
 
     /*--------------------*/
 
+
+    /*--------------------*/
+
     public Vector2 GetSunPosition(int gmt, int minute, int hour, int day, int month, int year, double longitude, double latitude)
     {
         DateTime time = new DateTime(year, month, day, hour, minute, 0, DateTimeKind.Utc);
