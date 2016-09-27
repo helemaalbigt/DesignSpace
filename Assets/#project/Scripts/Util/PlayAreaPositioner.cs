@@ -13,8 +13,28 @@ public class PlayAreaPositioner : MonoBehaviour {
 	}
 
 	public void ResetPlayAreaPosition(){
-		Vector3 positionCorrection = _PlayerStartAnchor.position - _Camera.position;
-		positionCorrection = new Vector3 (positionCorrection.x, 0, positionCorrection.z);
-		_PlayArea.Translate(positionCorrection);
-	}
+        SetPlayAreaToAnchor();
+        CorrectPlayAreaRotation();
+        CorrectPlayAreaPosition();
+    }
+
+    private void SetPlayAreaToAnchor()
+    {
+        _PlayArea.position = _PlayerStartAnchor.position;
+        _PlayArea.rotation = _PlayerStartAnchor.rotation;
+    }
+
+    private void CorrectPlayAreaRotation()
+    {
+        _PlayArea.rotation = Quaternion.Euler(new Vector3(_PlayerStartAnchor.eulerAngles.x, _PlayerStartAnchor.eulerAngles.y - _Camera.localEulerAngles.y, _PlayerStartAnchor.eulerAngles.z));
+    }
+
+    private void CorrectPlayAreaPosition()
+    {
+        Vector3 CameraPosOnXZ = new Vector3(_Camera.position.x, 0f, _Camera.position.z);
+        Vector3 StartAnchorOnXZ = new Vector3(_PlayerStartAnchor.position.x, 0f, _PlayerStartAnchor.position.z);
+        Vector3 positionCorrection = CameraPosOnXZ - StartAnchorOnXZ;
+
+        _PlayArea.Translate(-positionCorrection, UnityEngine.Space.World);
+    }
 }
