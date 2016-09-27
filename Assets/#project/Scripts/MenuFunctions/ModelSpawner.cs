@@ -54,8 +54,6 @@ public class ModelSpawner : MenuButton {
 			yield return null;
 		}
 
-		InputController.inUse = false;
-
 		modelSpawn.transform.parent = _GlobalWrapper;
         modelSpawn.transform.localScale = Vector3.one;
         NormalizeScaleAndChangeLayer(modelSpawn.transform);

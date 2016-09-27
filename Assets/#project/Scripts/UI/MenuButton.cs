@@ -53,7 +53,6 @@ public class MenuButton : MonoBehaviour {
 		
 	public void HoverOn(WandController C){
 
-
 		_LastHoverTimestamp = Time.time;
 		if (!_IsHoveredOn)
 		{
@@ -63,6 +62,9 @@ public class MenuButton : MonoBehaviour {
 
         if(_Highlight != null)
 		    _Highlight.enabled = true;
+
+        if (_Name != null)
+            _Name.enabled = true;
 
 		if (C.triggerDown)
 		{
@@ -76,9 +78,13 @@ public class MenuButton : MonoBehaviour {
 
 	protected void HoverOff(){
 		_IsHoveredOn = false;
+
 		if(_Highlight != null)
 			_Highlight.enabled = false;
-	}
+
+        if (_Name != null)
+            _Name.enabled = false;
+    }
 
 
 	protected IEnumerator HoverOffCount(){

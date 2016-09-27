@@ -51,7 +51,7 @@ public class MenuCheckbox: MenuButton {
         if (_Icon)
             _Icon.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
         if (_Name)
-            _Name.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
+       //     _Name.color = _IsSelected ? _IconSelectedColor : _IconNeutralColor;
         if (_Text)
             _Text.color = _IsSelected ? _TextSelectedColor : _TextNeutralColor;
     }
