@@ -23,5 +23,5 @@ AEC hackathon team: Carlos de la Barrera, Lorenzo Greco, Thomas Phillips, Thomas
 OBJ import script: AARO4130 <br>
 Sky box created by Hazel Whorley
 
-##License
+## License
 MIT License
